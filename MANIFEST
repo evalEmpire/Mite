@@ -4,3 +4,7 @@ lib/Mite/Mite.pod
 lib/Mite/Object.pod
 MANIFEST			This list of files
 MANIFEST.SKIP
+README
+LICENSE
+META.yml
+META.json
