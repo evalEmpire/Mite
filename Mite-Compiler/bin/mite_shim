@@ -1,0 +1,46 @@
+#!/usr/bin/perl -w
+
+
+=head1 NAME
+
+mite_shim - Produce a Mite::Shim file for your project
+
+=head1 SYNOPSIS
+
+    mite_shim <shim package name> > lib/Your/Mite.pm
+
+=head1 DESCRIPTION
+
+In order to be able to run without having L<Mite> installed, your
+project needs a "shim" module to load the compiled Mite code and
+provide dummy versions of C<has> and the like.
+
+This generates that shim.
+
+It changes the package name to fit your project, so multiple versions
+of the shim can be loaded at the same time.
+
+=head1 SEE ALSO
+
+L<Mite>
+
+=cut
+
+main(@ARGV);
+
+sub main {
+    my $shim_package = shift;
+    die "mite_shim <shim_package_name>\n" unless $shim_package;
+
+    require Mite::Shim;
+    my $shim_file = $INC{"Mite/Shim.pm"};
+
+    open my $in, "<", $shim_file or die "Can't open $shim_file for reading: $!";
+    while(my $line = <$in>) {
+        $line = "package $shim_package;\n" if $line =~ /^package Mite::Shim;\s*$/;
+
+        print $line;
+    }
+
+    return;
+}
