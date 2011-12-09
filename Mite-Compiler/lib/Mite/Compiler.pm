@@ -54,11 +54,13 @@ sub inject_mite_functions {
     no strict 'refs';
 
     *{ $package .'::has' } = sub {
+        my $name = shift;
+
         require Mite::Compiler::has;
         Mite::Compiler::has->new(
             package     => $package,
             mite_file   => $mite_file,
-            args        => { @_ }
+            args        => { name => $name, @_ }
         )->compile;
     };
 
