@@ -6,7 +6,7 @@ use warnings;
 
 =head1 NAME
 
-Mite::Shim
+Mite::Shim - Lets Mite compiled classes work without having Mite installed
 
 =head1 SYNOPSIS
 
