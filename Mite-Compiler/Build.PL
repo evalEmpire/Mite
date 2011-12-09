@@ -11,6 +11,12 @@ my $build = Module::Build->new(
 
     requires => {
         'perl'          => '5.8.1',
+        parent          => '0.217',
+        version         => '0.77',
+    },
+
+    build_requires => {
+        'Test::More'    => '0.88',
     },
 
     create_license      => 1,
