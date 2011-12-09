@@ -26,7 +26,8 @@ L<Mite>
 
 =cut
 
-main(@ARGV);
+# This makes it so we can load it with require() and test main()
+print main(@ARGV) unless caller;
 
 sub main {
     my $shim_package = shift;
@@ -35,12 +36,13 @@ sub main {
     require Mite::Shim;
     my $shim_file = $INC{"Mite/Shim.pm"};
 
+    my $out;
     open my $in, "<", $shim_file or die "Can't open $shim_file for reading: $!";
     while(my $line = <$in>) {
         $line = "package $shim_package;\n" if $line =~ /^package Mite::Shim;\s*$/;
 
-        print $line;
+        $out .= $line;
     }
 
-    return;
+    return $out;
 }

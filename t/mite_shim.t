@@ -5,8 +5,13 @@ use warnings;
 
 use Test::More;
 
+{
+    package mite_shim;
+    require "./bin/mite_shim";
+}
+
 note "mite_shim"; {
-    my $shim = `$^X "-Ilib" bin/mite_shim Foo::Bar`;
+    my $shim = mite_shim::main("Foo::Bar");
 
     like $shim, qr/package Foo::Bar/;
 }
