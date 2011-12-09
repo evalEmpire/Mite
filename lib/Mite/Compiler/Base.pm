@@ -25,8 +25,6 @@ sub save_code {
     my $self = shift;
     my $code_ref = shift;
 
-    $DB::single = 1;
-
     my $fh = $self->mite_fh;
 
     # Save the code in the mite file
@@ -49,6 +47,11 @@ sub new {
     return bless \%args, $class;
 }
 
+sub args {
+    my $self = shift;
+
+    return $self->{args} || {};
+}
 
 sub package {
     my $self = shift;
