@@ -27,11 +27,11 @@ Mite - Moose-like OO with no dependencies
     has "attribute";
 
     # A read-only integer attribute with a default
-    has "another_attribute" => {
+    has another_attribute => (
         is      => 'ro',
         type    => 'Int',
         default => 1
-    };
+    );
 
 
 =head1 DESCRIPTION
@@ -103,7 +103,7 @@ Declares this is a subclass of C<@classes>.
 
 =head3 has
 
-    has $name => \%args;
+    has $name => %args;
 
 Declares an object attribute named $name.
 
@@ -112,7 +112,7 @@ See L<Attributes> for details.
 
 =head3 class_has
 
-    class_has $name => \%args;
+    class_has $name => %args;
 
 Declares a class attribute named $name.
 
