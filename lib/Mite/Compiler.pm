@@ -60,7 +60,7 @@ sub inject_mite_functions {
         Mite::Compiler::has->new(
             package     => $package,
             mite_file   => $mite_file,
-            args        => { name => $name, @_ }
+            args        => { name => $name, is => 'rw', @_ }
         )->compile;
     };
 
@@ -71,7 +71,7 @@ sub inject_mite_functions {
         Mite::Compiler::class_has->new(
             package     => $package,
             mite_file   => $mite_file,
-            args        => { name => $name, @_ }
+            args        => { name => $name, is => 'rw', @_ }
         )->compile;
     };
 
