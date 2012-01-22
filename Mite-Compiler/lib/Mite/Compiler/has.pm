@@ -10,9 +10,24 @@ sub compile {
 
     my $args = $self->args;
 
-    my $name = $args->{name};
+    my $code;
+    if( $args->{is} eq 'rw' ) {
+        $code = $self->_rw;
+    }
+    else {
+        $code = $self->_ro;
+    }
+    $self->save_code(\$code);
 
-    my $code = sprintf <<'END', $name, $name, $name;
+    return;
+}
+
+
+sub _rw {
+    my $self = shift;
+    my $name = $self->args->{name};
+
+    return sprintf <<'END', $name, $name, $name;
 sub %s {
     my $self = shift;
 
@@ -26,10 +41,28 @@ sub %s {
 }
 
 END
+}
 
-    $self->save_code(\$code);
 
-    return;
+sub _ro {
+    my $self = shift;
+
+    my $name = $self->args->{name};
+    return sprintf <<'END', $name, $name, $name;
+sub %s {
+    my $self = shift;
+
+    if( @_ ) {
+        require Carp;
+        my $class = ref $self;
+        Carp::croak("%s is a read-only attribute of $class");
+    }
+    else {
+        return $self->{ q[%s] };
+    }
+}
+END
+
 }
 
 1;
