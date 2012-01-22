@@ -65,11 +65,13 @@ sub inject_mite_functions {
     };
 
     *{ $package .'::class_has' } = sub {
+        my $name = shift;
+
         require Mite::Compiler::class_has;
         Mite::Compiler::class_has->new(
             package     => $package,
             mite_file   => $mite_file,
-            args        => { @_ }
+            args        => { name => $name, @_ }
         )->compile;
     };
 
