@@ -1,5 +1,8 @@
 package Mite::Shim;
 
+# NOTE: Since the intention is to ship this file with a project, this file
+# cannot have any non-core dependencies.
+
 use strict;
 use warnings;
 
