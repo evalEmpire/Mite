@@ -66,7 +66,7 @@ source code.
 Run the C<mite_shim> program to generate the shim.  Tell it the name
 you want to give to the shim.  Put it into your lib directory.
 
-    mite_shim("Foo::Mite") > lib/Foo/Mite.pm
+    mite_shim 'Foo::Mite' > lib/Foo/Mite.pm
 
 =head3 3. Develop normally
 
