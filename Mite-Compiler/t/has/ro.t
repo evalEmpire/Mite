@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More;
+use Test::Most;
 
 note "making test class"; {
     package Foo;
@@ -36,8 +36,9 @@ note "basic object creation and accessors"; {
         is $obj->job,  "Unemployed",  "attribute not defined in new with default";
     }
 
-    ok !eval { $obj->job("Flower child") };
-    is $@, sprintf "job is a read-only attribute of Foo at %s line %d\n", __FILE__, __LINE__-1;
+    throws_ok
+      { $obj->job("Flower child") }
+      qr{job is a read-only attribute of Foo};
 }
 
 done_testing;
