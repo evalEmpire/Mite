@@ -16,7 +16,7 @@ my $build = Module::Build->new(
     },
 
     build_requires => {
-        'Test::More'    => '0.88',
+        'Test::Most'    => '0.31',
     },
 
     create_license      => 1,
