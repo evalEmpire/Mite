@@ -1,5 +1,10 @@
 #!/usr/bin/perl -w
 
+use strict;
+use warnings;
+
+use File::Spec;
+
 
 =head1 NAME
 
@@ -33,16 +38,34 @@ sub main {
     my $shim_package = shift;
     die "mite_shim <shim_package_name>\n" unless $shim_package;
 
-    require Mite::Shim;
-    my $shim_file = $INC{"Mite/Shim.pm"};
+    # Find the Mite::Shim file
+    my $shim_file = _find_mite_shim_pm();
 
-    my $out;
+    # Read Mite::Shim
+    my $out = '';
     open my $in, "<", $shim_file or die "Can't open $shim_file for reading: $!";
     while(my $line = <$in>) {
-        $line = "package $shim_package;\n" if $line =~ /^package Mite::Shim;\s*$/;
-
         $out .= $line;
     }
 
+    # Add our shim class as a subclass
+    $out .= <<"OUT";
+package $shim_package;
+BEGIN { our \@ISA = qw(Mite::Shim); }
+OUT
+
     return $out;
+}
+
+
+sub _find_mite_shim_pm {
+    for my $dir (@INC) {
+        # Avoid code refs in @INC
+        next if ref $dir;
+
+        my $shim = File::Spec->catfile($dir, "Mite", "Shim.pm");
+        return $shim if -e $shim;
+    }
+
+    die "Could not find Mite/Shim.pm";
 }

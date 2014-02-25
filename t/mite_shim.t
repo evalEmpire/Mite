@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More;
+use Test::Most;
 
 {
     package mite_shim;
@@ -13,7 +13,8 @@ use Test::More;
 note "mite_shim"; {
     my $shim = mite_shim::main("Foo::Bar");
 
-    like $shim, qr/package Foo::Bar/;
+    lives_ok { eval $shim };
+    isa_ok("Foo::Bar", "Mite::Shim");
 }
 
 done_testing;
