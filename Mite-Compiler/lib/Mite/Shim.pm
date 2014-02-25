@@ -11,7 +11,7 @@ Mite::Shim - Lets Mite compiled classes work without having Mite installed
 =head1 SYNOPSIS
 
     # First, make your own copy of the shim
-    mite_shim("Foo::Mite") > lib/Foo/Mite.pm
+    mite_shim 'Foo::Mite' > lib/Foo/Mite.pm
 
     # Then use it.
     package Foo;
