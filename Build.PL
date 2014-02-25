@@ -19,6 +19,8 @@ my $build = Module::Build->new(
         'Test::Most'    => '0.31',
     },
 
+    recursive_test_files => 1,
+
     create_license      => 1,
     create_readme       => 1,
 );
