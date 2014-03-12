@@ -1,16 +1,27 @@
+# Backup and temp files
 *.bak
 *~
 *.old
+.#*
+*.patch
+
+# Perl build files
 Makefile
 blib/
 pm_to_blib
 Build
 _build
+MYMETA.*
+
+# Coverage files
 cover_db/
 nytprof*
-*.patch
+
+# Misc OS things
 .DS_Store
-MYMETA.*
+
+# C compiler files
 *.o
 
+# Mite files
 *__mite.pm
