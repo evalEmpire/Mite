@@ -13,8 +13,8 @@ my $build = Module::Build->new(
         'perl'                  => '5.10.1',
         version                 => '0.77',
         Mouse                   => '1.08',
-        Method::Signatures      => '20140224',
-        Path::Tiny              => '0.052',
+        'Method::Signatures'    => '20140224',
+        'Path::Tiny'            => '0.052',
     },
 
     build_requires => {
