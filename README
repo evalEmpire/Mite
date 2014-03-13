@@ -17,11 +17,11 @@ SYNOPSIS
         has "attribute";
 
         # A read-only integer attribute with a default
-        has "another_attribute" => {
+        has another_attribute => (
             is      => 'ro',
             type    => 'Int',
             default => 1
-        };
+        );
 
 DESCRIPTION
     Moose and Mouse are great... unless you can't have any dependencies or
@@ -50,7 +50,7 @@ DESCRIPTION
     Run the "mite_shim" program to generate the shim. Tell it the name you
     want to give to the shim. Put it into your lib directory.
 
-        mite_shim("Foo::Mite") > lib/Foo/Mite.pm
+        mite_shim 'Foo::Mite' > lib/Foo/Mite.pm
 
    3. Develop normally
     Mite will detect when your code has changed and recompile itself. It
@@ -79,14 +79,14 @@ DESCRIPTION
     Declares this is a subclass of @classes.
 
    has
-        has $name => \%args;
+        has $name => %args;
 
     Declares an object attribute named $name.
 
     See Attributes for details.
 
    class_has
-        class_has $name => \%args;
+        class_has $name => %args;
 
     Declares a class attribute named $name.
 
