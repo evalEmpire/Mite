@@ -1,10 +1,8 @@
 {
    "abstract" : "Moose-like OO with no dependencies",
-   "author" : [
-      "unknown"
-   ],
+   "author" : [],
    "dynamic_config" : 1,
-   "generated_by" : "Module::Build version 0.38, CPAN::Meta::Converter version 2.112621",
+   "generated_by" : "Module::Build version 0.4203",
    "license" : [
       "perl_5"
    ],
@@ -14,14 +12,23 @@
    },
    "name" : "Mite",
    "prereqs" : {
+      "build" : {
+         "requires" : {
+            "Test::Most" : "0.31"
+         }
+      },
       "configure" : {
          "requires" : {
-            "Module::Build" : "0.38"
+            "Module::Build" : "0.42"
          }
       },
       "runtime" : {
          "requires" : {
-            "perl" : "v5.8.1"
+            "Method::Signatures" : "20140224",
+            "Mouse" : "1.08",
+            "Path::Tiny" : "0.052",
+            "perl" : "v5.10.1",
+            "version" : "0.77"
          }
       }
    },
@@ -29,6 +36,15 @@
       "Mite" : {
          "file" : "lib/Mite.pm",
          "version" : "v0.0.1"
+      },
+      "Mite::Attribute" : {
+         "file" : "lib/Mite/Attribute.pm"
+      },
+      "Mite::Class" : {
+         "file" : "lib/Mite/Class.pm"
+      },
+      "Mite::Project" : {
+         "file" : "lib/Mite/Project.pm"
       }
    },
    "release_status" : "stable",
