@@ -1,5 +1,6 @@
 package Mite::Project;
 
+use v5.10;
 use Mouse;
 use Method::Signatures;
 
@@ -26,19 +27,18 @@ method default($class: $new_default?) {
 method projects($class: $name, $project?) {
     state $projects = {};
 
-    return $projects{$name} ||= $project ? $project : $class->new;
+    return $project ? $projects->{$name} = $project
+                    : $projects->{$name} ||= $class->new;
 }
 
-method inject_mite_functions(:$class, :$file) {
+method inject_mite_functions(:$name, :$file) {
     my $class = $self->class(
-        class           => $class,
+        class           => $name,
         file            => $file,
     );
 
     no strict 'refs';
     *{ $class .'::has' } = func( $name, %args ) {
-        my $name = shift;
-
         require Mite::Attribute;
         my $attribute = Mite::Attribute->new(
             name => $name,
