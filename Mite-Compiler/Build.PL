@@ -10,9 +10,11 @@ my $build = Module::Build->new(
     license  => 'perl',
 
     requires => {
-        'perl'          => '5.8.1',
-        parent          => '0.217',
-        version         => '0.77',
+        'perl'                  => '5.10.1',
+        version                 => '0.77',
+        Mouse                   => '1.08',
+        Method::Signatures      => '20140224',
+        Path::Tiny              => '0.052',
     },
 
     build_requires => {

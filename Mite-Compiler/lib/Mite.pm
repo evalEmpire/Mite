@@ -1,9 +1,46 @@
 package Mite;
 
+# NOTE: Since the intention is to ship this file with a project, this file
+# cannot have any non-core dependencies.
+
 use strict;
 use warnings;
 
 use version 0.77; our $VERSION = qv("v0.0.1");
+
+sub _is_compiling {
+    return $ENV{MITE_COMPILE} ? 1 : 0;
+}
+
+sub import {
+    my $class = shift;
+    my($caller, $file) = caller;
+
+    # Turn on warnings and strict in the caller
+    warnings->import;
+    strict->import;
+
+    if( _is_compiling() ) {
+        require Mite::Project;
+        Mite::Project->default->inject_mite_functions(
+            class       => $caller,
+            file        => $file,
+        );
+    }
+    else {
+        my $mite_file = $file;
+        $mite_file =~ s{\.[^\.]*$}{.mite};
+
+        # Load the Mite code
+        require $mite_file;
+
+        # Inject blank Mite routines
+        for my $name (qw( extends has )) {
+            no strict 'refs';
+            *{ $caller .'::'. $name } = sub {};
+        }
+    }
+}
 
 
 =head1 NAME

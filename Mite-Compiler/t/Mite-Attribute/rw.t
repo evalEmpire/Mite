@@ -1,24 +1,32 @@
-#!/usr/bin/env perl -w
+#!/usr/bin/perl
 
 use strict;
 use warnings;
 
-use Test::More;
+use Test::Most;
 
-note "making test class"; {
+use Mite::Attribute;
+
+note "Create a class to test with"; {
     package Foo;
 
-    use Mite::Shim;
+    sub new {
+        my $class = shift;
+        bless { @_ }, $class
+    }
 
-    has "name";
-    has "job";
+    eval Mite::Attribute->new(
+        name    => 'name',
+        is      => 'rw',
+    )->compile;
 
-    # Sometimes delete the compile code, to test the compiled code.
-    END { Mite::Shim::clear_code if int rand 2; }
+    eval Mite::Attribute->new(
+        name    => 'job',
+        is      => 'rw',
+    )->compile;
 }
 
-
-note "basic object creation and accessors"; {
+note "try various tricky values"; {
     my $obj = Foo->new(
         name    => "Yarrow Hock"
     );
