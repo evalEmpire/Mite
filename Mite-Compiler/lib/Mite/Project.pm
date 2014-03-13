@@ -60,11 +60,19 @@ method inject_mite_functions(:$name, :$file) {
 }
 
 method compile() {
-    for my $class (values $self->classes) {
-        $class->write_mite;
+    for my $class (values %{$self->classes}) {
+        $class->compile;
     }
 
     return;
 };
+
+method write_mites() {
+    for my $class (values %{$self->classes}) {
+        $class->write_mite;
+    }
+
+    return;
+}
 
 1;
