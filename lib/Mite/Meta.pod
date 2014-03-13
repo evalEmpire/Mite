@@ -29,14 +29,6 @@ Methods will be added on an as-needed basis.
 Returns a list of the object attributes associated with the class,
 the things made with C<has>.
 
-=head3 class_has
-
-    my @class_attributes = $meta->class_has;
-
-Returns a list of the class attributes associated with the class,
-the things made with C<class_has>.
-
-
 =head1 SEE ALSO
 
 It is loosely based on L<Moose::Meta::Class> and L<Class::MOP::Class>,

@@ -8,11 +8,16 @@ use File::Spec;
 
 =head1 NAME
 
-mite_shim - Produce a Mite::Shim file for your project
+mite_shim - Produce a stand alone Mite module for your project
 
 =head1 SYNOPSIS
 
-    mite_shim <shim package name> > lib/Your/Mite.pm
+    # On the command line
+    mite_shim <shim package name> > lib/My/Mite.pm
+
+    # And then in your code
+    package My::Class
+    use My::Mite;
 
 =head1 DESCRIPTION
 
@@ -38,21 +43,23 @@ sub main {
     my $shim_package = shift;
     die "mite_shim <shim_package_name>\n" unless $shim_package;
 
-    # Find the Mite::Shim file
+    # Find the Mite file
     my $shim_file = _find_mite_shim_pm();
 
-    # Read Mite::Shim
-    my $out = '';
+    # Add our shim class as a subclass
+    my $out .= <<"OUT";
+{
+    package $shim_package;
+    BEGIN { our \@ISA = qw(Mite); }
+}
+
+OUT
+
+    # Append Mite.pm
     open my $in, "<", $shim_file or die "Can't open $shim_file for reading: $!";
     while(my $line = <$in>) {
         $out .= $line;
     }
-
-    # Add our shim class as a subclass
-    $out .= <<"OUT";
-package $shim_package;
-BEGIN { our \@ISA = qw(Mite::Shim); }
-OUT
 
     return $out;
 }
@@ -63,9 +70,9 @@ sub _find_mite_shim_pm {
         # Avoid code refs in @INC
         next if ref $dir;
 
-        my $shim = File::Spec->catfile($dir, "Mite", "Shim.pm");
+        my $shim = File::Spec->catfile($dir, "Mite.pm");
         return $shim if -e $shim;
     }
 
-    die "Could not find Mite/Shim.pm";
+    die "Could not find Mite.pm";
 }
