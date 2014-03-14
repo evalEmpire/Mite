@@ -98,44 +98,39 @@ L<Mouse>.
 
 =head2 How To Use It
 
-=head3 1. Install Mite
+=head3 1. Install Mite::Compiler
 
-Only developers must have Mite installed.  Install it normally from CPAN.
+Only developers must have Mite::Compiler installed.  Install it
+normally from CPAN.
 
-=head3 2. Inject the Mite::Shim into your source code
+=head3 2a. Depend on Mite
 
-Mite must have a small module bundled with your code.  This loads the
-Mite compiled code and provides dummy versions of all the exported
-functions.  It allows your code to run without needing to modify the
-source code.
+Add Mite into your runtime dependencies.  This is a very small module
+which loads the compiled Mite code.
+
+Or if you want no dependencies at all...
+
+=head3 2b. Inject the Mite::Shim into your source code
 
 Run the C<mite_shim> program to generate the shim.  Tell it the name
 you want to give to the shim.  Put it into your lib directory.
 
     mite_shim 'Foo::Mite' > lib/Foo/Mite.pm
 
-=head3 3. Develop normally
+=head3 3. Run C<mite> when you change your code.
 
-Mite will detect when your code has changed and recompile itself.  It
-will create F<Foo_mite.pl> files next to any file using Mite.  These
-contain the compiled code.
-
-It is not necessary, but it is safe and encouraged to commit these
-files to source control.  They will provide a running history of the
-real code that is running and help reproduce bugs.
-
-It's safe to delete the mite files, they will be rebuilt next time the
-code runs.
+Mite is "compiled" in that the code must be processed after editing
+before you run it.  This is done with the C<mite> program.
 
 =head3 4. Make sure the mite files are in your MANIFEST
 
-The compiled F<Foo_mite.pl> files must ship with your code, so make
+The compiled F<Foo.mite> files must ship with your code, so make
 sure they get picked up in your MANIFEST file.
 
 =head3 5. Ship normally
 
 Build and ship your distribution normally.  It contains everything it
-needs.  Do not add Mite as a dependency.
+needs.
 
 
 =head2 Exported Functions
@@ -152,15 +147,6 @@ Declares this is a subclass of C<@classes>.
     has $name => %args;
 
 Declares an object attribute named $name.
-
-See L<Attributes> for details.
-
-
-=head3 class_has
-
-    class_has $name => %args;
-
-Declares a class attribute named $name.
 
 See L<Attributes> for details.
 
@@ -231,9 +217,7 @@ subclasses, are stuck using Moose or Mouse forever.
 
 =head1 SEE ALSO
 
-L<Mite::Object> is what all Mite classes inherit from.
-
-L<Mite::Role> is used to define roles.
+L<Mite::Compiler> is what you need to develop with Mite.
 
 L<Mouse> is a forward-compatible version of Moose with no dependencies.
 
