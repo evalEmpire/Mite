@@ -23,7 +23,7 @@ sub import {
     if( _is_compiling() ) {
         require Mite::Project;
         Mite::Project->default->inject_mite_functions(
-            class       => $caller,
+            name        => $caller,
             file        => $file,
         );
     }
