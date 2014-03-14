@@ -38,7 +38,7 @@ method inject_mite_functions(:$name, :$file) {
     );
 
     no strict 'refs';
-    *{ $class .'::has' } = func( $name, %args ) {
+    *{ $name .'::has' } = func( $name, %args ) {
         require Mite::Attribute;
         my $attribute = Mite::Attribute->new(
             name => $name,
@@ -50,7 +50,7 @@ method inject_mite_functions(:$name, :$file) {
         return;
     };
 
-    *{ $class .'::extends' } = func(@classes) {
+    *{ $name .'::extends' } = func(@classes) {
         $class->extends(\@classes);
 
         return;
