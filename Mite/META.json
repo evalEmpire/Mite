@@ -14,7 +14,7 @@
    "prereqs" : {
       "build" : {
          "requires" : {
-            "Test::Most" : "0.31"
+            "Test::More" : "0.88"
          }
       },
       "configure" : {
@@ -24,9 +24,6 @@
       },
       "runtime" : {
          "requires" : {
-            "Method::Signatures" : "20140224",
-            "Mouse" : "1.08",
-            "Path::Tiny" : "0.052",
             "perl" : "v5.10.1",
             "version" : "0.77"
          }
@@ -36,15 +33,6 @@
       "Mite" : {
          "file" : "lib/Mite.pm",
          "version" : "v0.0.1"
-      },
-      "Mite::Attribute" : {
-         "file" : "lib/Mite/Attribute.pm"
-      },
-      "Mite::Class" : {
-         "file" : "lib/Mite/Class.pm"
-      },
-      "Mite::Project" : {
-         "file" : "lib/Mite/Project.pm"
       }
    },
    "release_status" : "stable",

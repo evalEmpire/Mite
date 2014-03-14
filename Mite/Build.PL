@@ -12,14 +12,10 @@ my $build = Module::Build->new(
     requires => {
         'perl'                  => '5.10.1',
         version                 => '0.77',
-        Mouse                   => '1.08',
-        'Method::Signatures'    => '20140224',
-        'Path::Tiny'            => '0.052',
     },
 
     build_requires => {
-        'Test::Most'    => '0.31',
-        'Test::Compile' => '0.24',
+        'Test::More'            => '0.88',
     },
 
     recursive_test_files => 1,

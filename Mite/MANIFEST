@@ -1,19 +1,9 @@
-bin/mite_shim
 Build.PL
 lib/Mite.pm
-lib/Mite/Attribute.pm
-lib/Mite/Class.pm
-lib/Mite/Meta.pod
-lib/Mite/Object.pod
-lib/Mite/Project.pm
 LICENSE
 MANIFEST			This list of files
 MANIFEST.SKIP
 META.json
 META.yml
 README
-t/lib/Test/Mite.pm
-t/Mite-Attribute/ro.t
-t/Mite-Attribute/rw.t
-t/Mite-Class/simple.t
-t/mite_shim.t
+t/00compile.t
