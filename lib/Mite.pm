@@ -29,7 +29,8 @@ sub import {
     }
     else {
         my $mite_file = $file;
-        $mite_file =~ s{\.[^\.]*$}{.mite};
+        $mite_file =~ s{\.[^\.]*$}{};
+        $mite_file .= '.mite';
 
         # Load the Mite code
         require $mite_file;

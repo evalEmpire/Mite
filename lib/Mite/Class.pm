@@ -5,6 +5,7 @@ use Mouse;
 use Mouse::Util::TypeConstraints;
 use Method::Signatures;
 use Path::Tiny;
+use Carp;
 
 class_type "Path::Tiny";
 
@@ -32,8 +33,15 @@ has mite_file =>
   is            => 'rw',
   isa           => 'Str|Path::Tiny',
   default       => method {
-      my $mite_file = $self->file;
-      $mite_file =~ s{\.[^\.]*$}{.mite};
+      my $file = $self->file;
+      my $mite_file = $file;
+
+      # Ensure it always has a .mite on the end no matter what
+      $mite_file =~ s{\.[^\.]*$}{};
+      $mite_file .= '.mite';
+
+      croak("The mite file is the same as the file ($file)") if $file eq $mite_file;
+
       return $mite_file;
   };
 
