@@ -66,6 +66,7 @@ method add_attributes(Mite::Attribute @attributes) {
 
     return;
 }
+*add_attribute = \&add_attributes;
 
 method compile() {
     return join "\n", '{',
