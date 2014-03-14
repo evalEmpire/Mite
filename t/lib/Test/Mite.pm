@@ -26,6 +26,8 @@ func mite_compile(Str $code, Str :$class, :$dir=tempdir()) {
 
     # Compile the code
     {
+        # Do it in its own process to avoid polluting the test process
+        # with compiler code.  This better emulates how it works in production.
         local $ENV{MITE_COMPILE} = 1;
         system("$^X $pmfile");
     }
