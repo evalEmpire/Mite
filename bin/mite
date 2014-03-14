@@ -1,0 +1,13 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+
+use Mite::Project;
+
+my $dir = shift || "lib";
+
+local $ENV{MITE_COMPILE} = 1;
+my $project = Mite::Project->default;
+$project->load_directories($dir);
+$project->write_mites;
