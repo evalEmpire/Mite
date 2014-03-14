@@ -28,6 +28,10 @@ sub import {
         );
     }
     else {
+        # Work around Test::Compile's tendency to 'use' modules.
+        # Mite.pm won't stand for that.
+        return if $ENV{TEST_COMPILE};
+
         my $mite_file = $file;
         $mite_file =~ s{\.[^\.]*$}{};
         $mite_file .= '.mite';
