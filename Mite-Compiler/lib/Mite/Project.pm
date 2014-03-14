@@ -3,6 +3,7 @@ package Mite::Project;
 use v5.10;
 use Mouse;
 use Method::Signatures;
+use Path::Tiny;
 
 use Mite::Class;
 
@@ -73,6 +74,39 @@ method write_mites() {
     }
 
     return;
+}
+
+method load_files(Defined @files) {
+    for my $file (@files) {
+        require $file;
+    }
+
+    return;
+}
+
+method load_directories(Defined @dirs) {
+    my @files = $self->_recurse_directories(@dirs);
+    $self->load_files(@files);
+
+    return;
+}
+
+# Recursively gather all the pm files in a directory
+method _recurse_directories(Defined @dirs) {
+    my @pm_files;
+
+    for my $dir (@dirs) {
+        my $iter = path($dir)->iterator({ recurse => 1, follow_symlinks => 1 });
+
+        while( my $path = $iter->() ) {
+            next if -d $path;
+            next unless $path =~ m{\.pm$};
+
+            push @pm_files, $path;
+        }
+    }
+
+    return @pm_files;
 }
 
 1;
