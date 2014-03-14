@@ -32,7 +32,11 @@ sub import {
         $mite_file =~ s{\.[^\.]*$}{};
         $mite_file .= '.mite';
 
-        # Load the Mite code
+        if( !-e $mite_file ) {
+            require Carp;
+            Carp::croak("Compiled Mite file ($mite_file) for $file is missing");
+        }
+
         require $mite_file;
 
         # Inject blank Mite routines
