@@ -19,6 +19,7 @@ my $build = Module::Build->new(
 
     build_requires => {
         'Test::Most'    => '0.31',
+        'Test::Compile' => '0.24',
     },
 
     recursive_test_files => 1,
