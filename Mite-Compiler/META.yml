@@ -1,8 +1,9 @@
 ---
-abstract: 'Moose-like OO with no dependencies'
+abstract: 'What you need to develop with Mite'
 author:
   - unknown
 build_requires:
+  Test::Compile: 0.24
   Test::Most: 0.31
 configure_requires:
   Module::Build: 0.42
@@ -12,22 +13,23 @@ license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
   version: 1.4
-name: Mite
+name: Mite-Compiler
 provides:
-  Mite:
-    file: lib/Mite.pm
-    version: v0.0.1
   Mite::Attribute:
     file: lib/Mite/Attribute.pm
     version: 0
   Mite::Class:
     file: lib/Mite/Class.pm
     version: 0
+  Mite::Compiler:
+    file: lib/Mite/Compiler.pm
+    version: v0.0.1
   Mite::Project:
     file: lib/Mite/Project.pm
     version: 0
 requires:
   Method::Signatures: 20140224
+  Mite: v0.0.1
   Mouse: 1.08
   Path::Tiny: 0.052
   perl: v5.10.1

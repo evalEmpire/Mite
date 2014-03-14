@@ -6,12 +6,13 @@ use warnings;
 use Module::Build;
 
 my $build = Module::Build->new(
-    module_name => 'Mite',
+    module_name => 'Mite::Compiler',
     license  => 'perl',
 
     requires => {
         'perl'                  => '5.10.1',
         version                 => '0.77',
+        Mite                    => '0.0.1',
         Mouse                   => '1.08',
         'Method::Signatures'    => '20140224',
         'Path::Tiny'            => '0.052',
