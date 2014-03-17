@@ -5,7 +5,8 @@ use Method::Signatures;
 
 has default =>
   is            => 'rw',
-  isa           => 'Maybe[Str|CodeRef]';
+  isa           => 'Maybe[Str|CodeRef]',
+  predicate     => 'has_default';
 
 has is =>
   is            => 'rw',

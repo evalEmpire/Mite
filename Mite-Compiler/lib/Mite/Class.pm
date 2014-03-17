@@ -130,25 +130,15 @@ method _compile_defaults {
 }
 
 method _attributes_with_defaults() {
-    my @defaults;
-    for my $attribute (values %{$self->attributes}) {
-        my $default = $attribute->default;
-        next unless defined $default;
-
-        my $name = $attribute->name;
-
-        push @defaults, $default;
-    }
-
-    return \@defaults;
+    return grep { $_->has_default } values %{$self->attributes};
 }
 
 method _attributes_with_string_defaults() {
-    return grep { !ref $_->default } @{$self->_attributes_with_defaults};
+    return grep { !ref $_->default } $self->_attributes_with_defaults;
 }
 
 method _attributes_with_code_defaults() {
-    return grep { ref $_->default } @{$self->_attributes_with_defaults};
+    return grep { ref $_->default } $self->_attributes_with_defaults;
 }
 
 method _compile_attributes() {
