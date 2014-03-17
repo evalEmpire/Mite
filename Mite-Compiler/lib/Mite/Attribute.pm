@@ -27,15 +27,10 @@ method _compile_rw() {
 
     return sprintf <<'CODE', $name, $name, $name;
 sub %s {
-    my $self = shift;
-
-    if( @_ ) {
-        $self->{ q[%s] } = shift;
-        return;
-    }
-    else {
-        return $self->{ q[%s] };
-    }
+    # This is hand optimized.  Yes, even adding
+    # return will slow it down.
+    @_ > 1 ? $_[0]->{ q[%s] } = $_[1]
+           : $_[0]->{ q[%s] };
 }
 CODE
 
@@ -45,16 +40,10 @@ method _compile_ro() {
     my $name = $self->name;
     return sprintf <<'CODE', $name, $name, $name;
 sub %s {
-    my $self = shift;
-
-    if( @_ ) {
-        require Carp;
-        my $class = ref $self;
-        Carp::croak("%s is a read-only attribute of $class");
-    }
-    else {
-        return $self->{ q[%s] };
-    }
+    # This is hand optimized.  Yes, even adding
+    # return will slow it down.
+    @_ > 1 ? require Carp && Carp::croak("%s is a read-only attribute of @{[ref $_[0]]}")
+           : $_[0]->{ q[%s] };
 }
 CODE
 }
