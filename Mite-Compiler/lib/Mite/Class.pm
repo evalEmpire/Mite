@@ -126,19 +126,23 @@ method _compile_string_default($attribute, :$arg_hash='$args{%s}') {
 
 method _compile_defaults {
     return join "\n", map { $self->_compile_string_default($_) }
-                          $self->_attributes_with_string_defaults;
+                          $self->_attributes_with_simple_defaults;
 }
 
 method _attributes_with_defaults() {
     return grep { $_->has_default } values %{$self->attributes};
 }
 
-method _attributes_with_string_defaults() {
-    return grep { !ref $_->default } $self->_attributes_with_defaults;
+method _attributes_with_simple_defaults() {
+    return grep { $_->has_simple_default } values %{$self->attributes};
 }
 
-method _attributes_with_code_defaults() {
-    return grep { ref $_->default } $self->_attributes_with_defaults;
+method _attributes_with_coderef_defaults() {
+    return grep { $_->has_coderef_default } values %{$self->attributes};
+}
+
+method _attributes_with_dataref_defaults() {
+    return grep { $_->has_dataref_default } values %{$self->attributes};
 }
 
 method _compile_attributes() {
