@@ -116,20 +116,33 @@ sub new {
     my $class = shift;
     my %%args  = @_;
 
+    my $self = bless \%%args, $class;
+
     %s
 
-    return bless \%%args, $class;
+    return $self;
 }
 CODE
 }
 
-method _compile_string_default($attribute, :$arg_hash='$args{%s}') {
-    return sprintf "$arg_hash //= q[%s];", $attribute->name, $attribute->default;
+method _compile_simple_default($attribute) {
+    return sprintf '$self->{%s} //= q[%s];', $attribute->name, $attribute->default;
+}
+
+method _compile_coderef_default($attribute) {
+    my $var = $attribute->coderef_default_variable;
+
+    return sprintf 'our %s; $self->{%s} //= %s->(\$self);',
+      $var, $attribute->name, $var;
 }
 
 method _compile_defaults {
-    return join "\n", map { $self->_compile_string_default($_) }
-                          $self->_attributes_with_simple_defaults;
+    my @simple_defaults = map { $self->_compile_simple_default($_) }
+                              $self->_attributes_with_simple_defaults;
+    my @coderef_defaults = map { $self->_compile_coderef_default($_) }
+                               $self->_attributes_with_coderef_defaults;
+
+    return join "\n", @simple_defaults, @coderef_defaults;
 }
 
 method _attributes_with_defaults() {

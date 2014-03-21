@@ -13,6 +13,7 @@ has coderef_default_variable =>
   isa           => 'Str',
   lazy          => 1,           # else $self->name might not be set
   default       => method {
+      # This must be coordinated with Mite.pm
       return sprintf '$__%s_DEFAULT__', $self->name;
   };
 
