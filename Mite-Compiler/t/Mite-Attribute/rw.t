@@ -3,11 +3,12 @@
 use strict;
 use warnings;
 
-use Test::Most;
+use lib 't/lib';
 
+use Test::Mite;
 use Mite::Attribute;
 
-note "Create a class to test with"; {
+after_case "Create a class to test with" => sub {
     package Foo;
 
     sub new {
@@ -17,16 +18,14 @@ note "Create a class to test with"; {
 
     eval Mite::Attribute->new(
         name    => 'name',
-        is      => 'rw',
-    )->compile;
+    )->compile; die $@ if $@;
 
     eval Mite::Attribute->new(
         name    => 'job',
-        is      => 'rw',
-    )->compile;
-}
+    )->compile; die $@ if $@;
+};
 
-note "try various tricky values"; {
+tests "try various tricky values" => sub {
     my $obj = Foo->new(
         name    => "Yarrow Hock"
     );
@@ -48,6 +47,6 @@ note "try various tricky values"; {
 
     $obj->name("");
     is $obj->name, "",            "set to empty string";
-}
+};
 
 done_testing;

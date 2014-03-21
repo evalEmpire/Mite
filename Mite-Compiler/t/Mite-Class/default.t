@@ -3,13 +3,15 @@
 use strict;
 use warnings;
 
-use Test::Most;
+use lib 't/lib';
+
+use Test::Mite;
 
 use Path::Tiny;
 use Mite::Class;
 use Mite::Attribute;
 
-note "Create a class to test with"; {
+after_case "Create a class to test with"=> sub {
     my $class = Mite::Class->new(
         name            => 'Foo',
         file            => Path::Tiny->tempfile,
@@ -29,12 +31,12 @@ note "Create a class to test with"; {
     );
 
     eval $class->compile or die $@;
-}
+};
 
-note "Defaults"; {
+tests "Defaults" => sub {
     my $obj = new_ok "Foo";
     is $obj->name, "Yarrow Hock";
     is $obj->howmany, 0;
-}
+};
 
 done_testing;
