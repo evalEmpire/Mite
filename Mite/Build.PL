@@ -14,6 +14,10 @@ my $build = Module::Build->new(
         version                 => '0.77',
     },
 
+    recommends => {
+        "Class::XSAccessor"     => '1.17',
+    },
+
     build_requires => {
         'Test::More'            => '0.88',
     },
