@@ -5,13 +5,12 @@ use warnings;
 
 use lib 't/lib';
 
-use Test::Most;
 use Test::Mite;
 
 use Mite::Class;
 use Path::Tiny;
 
-note "Basic mite_file handling"; {
+tests "Basic mite_file handling" => sub {
     my $tempdir = Path::Tiny->tempdir;
 
     my $class = Mite::Class->new(
@@ -28,6 +27,6 @@ note "Basic mite_file handling"; {
     $class->write_mite;
     require $class->mite_file;
     new_ok "Foo";
-}
+};
 
 done_testing;

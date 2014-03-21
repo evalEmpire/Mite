@@ -4,13 +4,33 @@ use v5.10;
 use strict;
 use warnings;
 
+use parent 'Fennec';
+
 use autodie;
 use Path::Tiny;
 use Method::Signatures;
 
-use Test::Builder::Module;
-
 our @EXPORT = qw(mite_compile mite_load);
+
+method after_import($class: $info) {
+    my @caller = ($info->{importer}, __FILE__, __LINE__);
+
+    # Test the pure Perl implementation.
+    $info->{layer}->add_case(
+        \@caller,
+        case_pure_perl => func(...) {
+            $ENV{MITE_PURE_PERL} = 1;
+        }
+    );
+
+    # Test with Class::XSAccessor, if available.
+    $info->{layer}->add_case(
+        \@caller,
+        case_xs => func(...) {
+            $ENV{MITE_PURE_PERL} = 0;
+        }
+    ) if eval { require Class::XSAccessor };
+}
 
 func class2pm(Str $class) {
     my $pm = $class.'.pm';
