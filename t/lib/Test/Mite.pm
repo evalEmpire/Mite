@@ -13,11 +13,9 @@ use Method::Signatures;
 our @EXPORT = qw(mite_compile mite_load);
 
 method after_import($class: $info) {
-    my @caller = ($info->{importer}, __FILE__, __LINE__);
-
     # Test the pure Perl implementation.
     $info->{layer}->add_case(
-        \@caller,
+        [$info->{importer}, __FILE__, __LINE__ + 1],
         case_pure_perl => func(...) {
             $ENV{MITE_PURE_PERL} = 1;
         }
@@ -25,7 +23,7 @@ method after_import($class: $info) {
 
     # Test with Class::XSAccessor, if available.
     $info->{layer}->add_case(
-        \@caller,
+        [$info->{importer}, __FILE__, __LINE__ + 1],
         case_xs => func(...) {
             $ENV{MITE_PURE_PERL} = 0;
         }
