@@ -5,8 +5,16 @@ use Method::Signatures;
 
 has default =>
   is            => 'rw',
-  isa           => 'Maybe[Str|CodeRef]',
+  isa           => 'Maybe[Str|Ref]',
   predicate     => 'has_default';
+
+has coderef_default_variable =>
+  is            => 'rw',
+  isa           => 'Str',
+  lazy          => 1,           # else $self->name might not be set
+  default       => method {
+      return sprintf '$__%s_DEFAULT__', $self->name;
+  };
 
 has is =>
   is            => 'rw',
@@ -17,6 +25,32 @@ has name =>
   is            => 'rw',
   isa           => 'Str',
   required      => 1;
+
+method has_dataref_default() {
+    # We don't have a default
+    return 0 unless $self->has_default;
+
+    # It's not a reference.
+    return 0 if $self->has_simple_default;
+
+    return ref $self->default ne 'CODE';
+}
+
+method has_coderef_default() {
+    # We don't have a default
+    return 0 unless $self->has_default;
+
+    return ref $self->default eq 'CODE';
+}
+
+method has_simple_default() {
+    return 0 unless $self->has_default;
+
+    # Special case for regular expressions, they do not need to be dumped.
+    return 1 if ref $self->default eq 'Regexp';
+
+    return !ref $self->default;
+}
 
 method compile() {
     my $perl_method = $self->is eq 'rw' ? '_compile_rw_perl' : '_compile_ro_perl';
