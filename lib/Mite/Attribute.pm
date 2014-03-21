@@ -23,10 +23,32 @@ method compile() {
 }
 
 method _compile_rw() {
+    return sprintf <<'CODE', $self->_compile_rw_xs, $self->_compile_rw_perl;
+if( !$ENV{MITE_PURE_PERL} && eval { require Class::Accessor } ) {
+%s
+}
+else {
+%s
+}
+CODE
+}
+
+method _compile_rw_xs() {
+    my $name = $self->name;
+
+    return <<"CODE";
+Class::XSAccessor->import(
+    accessors => { q[$name] => q[$name] }
+);
+CODE
+
+}
+
+method _compile_rw_perl() {
     my $name = $self->name;
 
     return sprintf <<'CODE', $name, $name, $name;
-sub %s {
+*%s = sub {
     # This is hand optimized.  Yes, even adding
     # return will slow it down.
     @_ > 1 ? $_[0]->{ q[%s] } = $_[1]
