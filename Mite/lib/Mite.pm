@@ -43,8 +43,21 @@ sub import {
 
         require $mite_file;
 
+        no strict 'refs';
+        *{ $caller .'::has' } = sub {
+            my $name = shift;
+            my %args = @_;
+
+            my $default = $args{default};
+            return unless ref $default eq 'CODE';
+
+            ${$caller .'::__'.$name.'_DEFAULT__'} = $default;
+
+            return;
+        };
+
         # Inject blank Mite routines
-        for my $name (qw( extends has )) {
+        for my $name (qw( extends )) {
             no strict 'refs';
             *{ $caller .'::'. $name } = sub {};
         }
