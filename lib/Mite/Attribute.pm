@@ -19,11 +19,10 @@ has name =>
   required      => 1;
 
 method compile() {
-    return $self->is eq 'rw' ? $self->_compile_rw : $self->_compile_ro;
-}
+    my $perl_method = $self->is eq 'rw' ? '_compile_rw_perl' : '_compile_ro_perl';
+    my $xs_method   = $self->is eq 'rw' ? '_compile_rw_xs'   : '_compile_ro_xs';
 
-method _compile_rw() {
-    return sprintf <<'CODE', $self->_compile_rw_xs, $self->_compile_rw_perl;
+    return sprintf <<'CODE', $self->$xs_method, $self->$perl_method;
 if( !$ENV{MITE_PURE_PERL} && eval { require Class::Accessor } ) {
 %s
 }
@@ -58,15 +57,25 @@ CODE
 
 }
 
-method _compile_ro() {
+method _compile_ro_xs() {
+    my $name = $self->name;
+
+    return <<"CODE";
+Class::XSAccessor->import(
+    getters => { q[$name] => q[$name] }
+);
+CODE
+}
+
+method _compile_ro_perl() {
     my $name = $self->name;
     return sprintf <<'CODE', $name, $name, $name;
-sub %s {
+*%s = sub {
     # This is hand optimized.  Yes, even adding
     # return will slow it down.
     @_ > 1 ? require Carp && Carp::croak("%s is a read-only attribute of @{[ref $_[0]]}")
            : $_[0]->{ q[%s] };
-}
+};
 CODE
 }
 
