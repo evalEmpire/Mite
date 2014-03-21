@@ -61,7 +61,7 @@
         return $pm;
     }
 
-    func mite_compile(Str $code, Str :$class, :$dir=Path::Tiny->tempdir) {
+    func mite_compile(Str $code, Str :$class, :$dir=Path::Tiny->tempdir( CLEANUP => 0 )) {
         # Write the code to a temp file
         my $pmfile = $dir->child( _class2pm($class) );
         $pmfile->spew($code);
@@ -69,16 +69,20 @@
         # Compile the code
         # Do it in its own process to avoid polluting the test process
         # with compiler code.  This better emulates how it works in production.
-        {
-            local $ENV{MITE_COMPILE} = 1;
-            system("$^X $pmfile");
-        }
+        my $child = Child->new(sub {
+            require Mite::Project;
+            my $project = Mite::Project->default;
+            $project->load_files($pmfile);
+            $project->write_mites;
+        });
+        my $process = $child->start;
+        $process->wait;
 
         return $pmfile;
     }
 
-    func mite_load(Str $code) {
-        my $file = mite_compile($code);
+    func mite_load(Str $code, Str :$class) {
+        my $file = mite_compile($code, class => $class);
 
         # Allow the same file to be recompiled and reloaded
         return do $file;

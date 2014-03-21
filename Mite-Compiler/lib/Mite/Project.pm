@@ -77,6 +77,7 @@ method write_mites() {
 }
 
 method load_files(Defined @files) {
+    local $ENV{MITE_COMPILE} = 1;
     for my $file (@files) {
         require $file;
     }
