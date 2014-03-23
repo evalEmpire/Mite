@@ -224,7 +224,7 @@ including roles at compile time.  It must be baked in.
 
 Finally, Moose and Mouse both require role users and subclassers to
 also be Moose or Mouse classes.  This is a dangerous encapsulation
-breech of an implementation detail.  It means the class, and its
+breach of an implementation detail.  It means the class, and its
 subclasses, are stuck using Moose or Mouse forever.
 
 
