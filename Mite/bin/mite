@@ -1,0 +1,47 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+
+use Mite::Project;
+
+my $dir = shift || "lib";
+
+local $ENV{MITE_COMPILE} = 1;
+my $project = Mite::Project->default;
+$project->load_directories($dir);
+$project->write_mites;
+
+
+=head1 NAME
+
+mite - A Perl OO compiler
+
+=head1 SYNOPSIS
+
+    mite <directory>
+
+=head1 DESCRIPTION
+
+mite is a Perl compiler for L<Mite>, a Moose-like module for doing
+object oriented code.  Unlike others, code using Mite has no
+dependencies, I<even on Mite itself>.
+
+mite allows you to write object-oriented Perl modules without any
+dependencies.  There is also no startup cost to build the classes,
+they are already built.
+
+mite compiles not into C, but into more Perl.  Each .pm file which
+uses Mite will have an associated .mite file which contains the
+additional code implementing the class.  This is pure Perl code and
+will load as fast as any other Perl.
+
+=head1 NOTE
+
+You B<must> rerun mite after every change to a .pm file.
+
+=head1 SEE ALSO
+
+L<Mite>
+
+=cut

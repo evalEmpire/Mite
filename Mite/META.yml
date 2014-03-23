@@ -1,0 +1,37 @@
+---
+abstract: 'Moose-like OO with no dependencies'
+author:
+  - unknown
+build_requires:
+  Test::Most: 0.31
+configure_requires:
+  Module::Build: 0.42
+dynamic_config: 1
+generated_by: 'Module::Build version 0.4203, CPAN::Meta::Converter version 2.120921'
+license: perl
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4
+name: Mite
+provides:
+  Mite:
+    file: lib/Mite.pm
+    version: v0.0.1
+  Mite::Attribute:
+    file: lib/Mite/Attribute.pm
+    version: 0
+  Mite::Class:
+    file: lib/Mite/Class.pm
+    version: 0
+  Mite::Project:
+    file: lib/Mite/Project.pm
+    version: 0
+requires:
+  Method::Signatures: 20140224
+  Mouse: 1.08
+  Path::Tiny: 0.052
+  perl: v5.10.1
+  version: 0.77
+resources:
+  license: http://dev.perl.org/licenses/
+version: v0.0.1
