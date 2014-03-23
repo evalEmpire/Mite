@@ -28,5 +28,12 @@ my $build = Module::Build->new(
 
     create_license      => 1,
     create_readme       => 1,
+
+    meta_merge => {
+        resources => {
+            bugtracker => 'https://github.com/evalEmpire/Mite/issues',
+            repository => 'https://github.com/evalEmpire/Mite',
+        },
+    }
 );
 $build->create_build_script;

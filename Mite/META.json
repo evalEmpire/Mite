@@ -2,7 +2,7 @@
    "abstract" : "Moose-like OO with no dependencies",
    "author" : [],
    "dynamic_config" : 1,
-   "generated_by" : "Module::Build version 0.4203",
+   "generated_by" : "Module::Build version 0.4205",
    "license" : [
       "perl_5"
    ],
@@ -23,6 +23,9 @@
          }
       },
       "runtime" : {
+         "recommends" : {
+            "Class::XSAccessor" : "1.17"
+         },
          "requires" : {
             "perl" : "v5.10.1",
             "version" : "0.77"
@@ -37,9 +40,15 @@
    },
    "release_status" : "stable",
    "resources" : {
+      "bugtracker" : {
+         "web" : "https://github.com/evalEmpire/Mite/issues"
+      },
       "license" : [
          "http://dev.perl.org/licenses/"
-      ]
+      ],
+      "repository" : {
+         "url" : "https://github.com/evalEmpire/Mite"
+      }
    },
    "version" : "v0.0.1"
 }
