@@ -58,7 +58,7 @@ method compile() {
     my $xs_method   = $self->is eq 'rw' ? '_compile_rw_xs'   : '_compile_ro_xs';
 
     return sprintf <<'CODE', $self->$xs_method, $self->$perl_method;
-if( !$ENV{MITE_PURE_PERL} && eval { require Class::Accessor } ) {
+if( !$ENV{MITE_PURE_PERL} && eval { require Class::XSAccessor } ) {
 %s
 }
 else {
