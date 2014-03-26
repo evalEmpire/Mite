@@ -32,10 +32,8 @@ sub import {
         # Mite.pm won't stand for that.
         return if $ENV{TEST_COMPILE};
 
-        my $mite_file = $file;
-        $mite_file =~ s{\.[^\.]*$}{};
-        $mite_file .= '.mite';
-
+        # This must be coordinated with Mite::Class->mite_file
+        my $mite_file = $file . ".mite.pmc";
         if( !-e $mite_file ) {
             require Carp;
             Carp::croak("Compiled Mite file ($mite_file) for $file is missing");

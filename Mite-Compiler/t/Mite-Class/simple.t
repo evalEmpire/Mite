@@ -18,7 +18,7 @@ tests "Basic mite_file handling" => sub {
         file    => $tempdir->child("Foo.pm"),
     );
 
-    is $class->mite_file, $tempdir->child("Foo.mite");
+    is $class->mite_file, $tempdir->child("Foo.pm.mite.pmc");
 
     ok !-e $class->mite_file;
     $class->write_mite;
