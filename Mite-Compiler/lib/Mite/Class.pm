@@ -24,32 +24,6 @@ has name =>
   isa           => 'Str',
   required      => 1;
 
-has file =>
-  is            => 'rw',
-  isa           => 'Str|Path::Tiny',
-  required      => 1;
-
-has mite_file =>
-  is            => 'rw',
-  isa           => 'Str|Path::Tiny',
-  default       => method {
-      return $self->file . ".mite.pmc";
-  };
-
-method write_mite() {
-    my $file = path $self->mite_file;
-    $file->spew_utf8( $self->compile );
-
-    return;
-}
-
-method delete_mite() {
-    my $file = $self->mite_file;
-
-    # Kill the file dead on VMS
-    1 while unlink $file;
-}
-
 method add_attributes(Mite::Attribute @attributes) {
     for my $attribute (@attributes) {
         $self->attributes->{ $attribute->name } = $attribute;

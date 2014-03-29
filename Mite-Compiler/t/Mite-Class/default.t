@@ -14,7 +14,6 @@ use Mite::Attribute;
 after_case "Create a class to test with"=> sub {
     my $class = Mite::Class->new(
         name            => 'Foo',
-        file            => Path::Tiny->tempfile,
     );
 
     $class->add_attributes(
