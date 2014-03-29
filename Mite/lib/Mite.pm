@@ -23,7 +23,7 @@ sub import {
     if( _is_compiling() ) {
         require Mite::Project;
         Mite::Project->default->inject_mite_functions(
-            name        => $caller,
+            package     => $caller,
             file        => $file,
         );
     }
@@ -32,8 +32,8 @@ sub import {
         # Mite.pm won't stand for that.
         return if $ENV{TEST_COMPILE};
 
-        # This must be coordinated with Mite::Class->mite_file
-        my $mite_file = $file . ".mite.pmc";
+        # Changes to this filename must be coordinated with Mite::Compiled
+        my $mite_file = $file . ".mite.pm";
         if( !-e $mite_file ) {
             require Carp;
             Carp::croak("Compiled Mite file ($mite_file) for $file is missing");

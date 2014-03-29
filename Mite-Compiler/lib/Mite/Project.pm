@@ -5,16 +5,23 @@ use Mouse;
 use Method::Signatures;
 use Path::Tiny;
 
+use Mite::Source;
 use Mite::Class;
 
-has classes =>
+has sources =>
   is            => 'ro',
-  isa           => 'HashRef[Mite::Class]',
+  isa           => 'HashRef[Mite::Source]',
   default       => sub { {} };
 
-method class(:$class=caller(), :$file=(caller)[1]) {
-    return $self->classes->{$class} ||= Mite::Class->new(
-        name    => $class,
+method classes() {
+    return $self->sources->classes;
+}
+
+method source_for($file) {
+    # Normalize the path.
+    $file = path($file)->realpath;
+
+    return $self->sources->{$file} ||= Mite::Source->new(
         file    => $file,
     );
 }
@@ -32,14 +39,13 @@ method projects($class: $name, $project?) {
                     : $projects->{$name} ||= $class->new;
 }
 
-method inject_mite_functions(:$name, :$file) {
-    my $class = $self->class(
-        class           => $name,
-        file            => $file,
-    );
+# This is the shim Mite.pm uses when compiling.
+method inject_mite_functions(:$package, :$file) {
+    my $source = $self->source_for($file);
+    my $class  = $source->class_for($package);
 
     no strict 'refs';
-    *{ $name .'::has' } = func( $name, %args ) {
+    *{ $package .'::has' } = func( $name, %args ) {
         require Mite::Attribute;
         my $attribute = Mite::Attribute->new(
             name => $name,
@@ -51,7 +57,7 @@ method inject_mite_functions(:$name, :$file) {
         return;
     };
 
-    *{ $name .'::extends' } = func(@classes) {
+    *{ $package .'::extends' } = func(@classes) {
         $class->extends(\@classes);
 
         return;
@@ -60,17 +66,9 @@ method inject_mite_functions(:$name, :$file) {
     return;
 }
 
-method compile() {
-    for my $class (values %{$self->classes}) {
-        $class->compile;
-    }
-
-    return;
-};
-
 method write_mites() {
-    for my $class (values %{$self->classes}) {
-        $class->write_mite;
+    for my $source (values %{$self->sources}) {
+        $source->compiled->write;
     }
 
     return;
