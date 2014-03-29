@@ -8,7 +8,7 @@ use lib 't/lib';
 use Test::Mite;
 
 after_case "Setup class" => sub {
-    mite_load(<<'CODE', class => "Foo");
+    mite_load(<<'CODE');
 package Foo;
 use Mite;
 

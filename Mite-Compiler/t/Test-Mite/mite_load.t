@@ -7,7 +7,7 @@ use lib 't/lib';
 use Test::Mite;
 
 tests "basic compilation" => sub {
-    mite_load(<<'CODE', class => "Foo");
+    mite_load(<<'CODE');
 package Foo;
 
 use Mite;
