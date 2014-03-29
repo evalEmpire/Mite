@@ -24,6 +24,12 @@ has name =>
   isa           => 'Str',
   required      => 1;
 
+has source =>
+  is            => 'ro',
+  isa           => 'Mite::Source',
+  # avoid a circular dep with Mite::Source
+  weak_ref      => 1;
+
 method add_attributes(Mite::Attribute @attributes) {
     for my $attribute (@attributes) {
         $self->attributes->{ $attribute->name } = $attribute;
@@ -62,7 +68,14 @@ method _compile_extends() {
     my $parents = $self->extends;
     return '' unless @$parents;
 
-    my $require_list = join "\n\t", map { "require $_;" } @$parents;
+    my $source = $self->source;
+
+    my $require_list = join "\n\t",
+                            map  { "require $_;" }
+                            # Don't require a class from the same source
+                            grep { !$source || !$source->has_class($_) }
+                            @$parents;
+
     my $isa_list     = join ", ", map { "q[$_]" } @$parents;
 
     return <<"END";
@@ -75,13 +88,23 @@ BEGIN {
 END
 }
 
+method _compile_bless() {
+    if( @{$self->extends} ) {
+        # Ensure we get their defaults.
+        return '$class->SUPER::new(%args)';
+    }
+    else {
+        return 'bless \%args, $class';
+    }
+}
+
 method _compile_new() {
-    return sprintf <<'CODE', $self->_compile_defaults;
+    return sprintf <<'CODE', $self->_compile_bless, $self->_compile_defaults;
 sub new {
     my $class = shift;
     my %%args  = @_;
 
-    my $self = bless \%%args, $class;
+    my $self = %s;
 
     %s
 

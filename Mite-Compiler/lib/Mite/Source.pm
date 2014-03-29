@@ -57,13 +57,18 @@ has compiled =>
       return Mite::Compiled->new( source => $self );
   };
 
+method has_class($class) {
+    return defined $self->classes->{$class};
+}
+
 method compile() {
     return $self->compiled->compile();
 }
 
 method class_for($class) {
     return $self->classes->{$class} ||= Mite::Class->new(
-        name    => $class
+        name    => $class,
+        source  => $self,
     );
 }
 
