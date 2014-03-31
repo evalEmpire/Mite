@@ -12,7 +12,7 @@
     method defaults($class: ...) {
         my %params = $class->SUPER::defaults;
 
-        push @{ $params{utils} }, "Test::Mite::Functions";
+        push @{ $params{utils} }, "Test::Mite::Functions", "Test::Deep";
 
         return %params;
     }
@@ -48,7 +48,11 @@
     use warnings;
 
     use parent 'Exporter';
-    our @EXPORT = qw(mite_compile mite_load sim_source sim_class);
+    our @EXPORT = qw(
+        mite_compile mite_load
+        sim_source sim_class
+        rand_class_name
+    );
 
     use Test::Sims;
     use Method::Signatures;
