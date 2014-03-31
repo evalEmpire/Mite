@@ -7,10 +7,8 @@ use lib 't/lib';
 use Test::Mite;
 use Path::Tiny;
 
-use Mite::Source;
-
 tests "class_for" => sub {
-    my $source = Mite::Source->new( file => Path::Tiny->tempfile );
+    my $source = sim_source;
 
     my $foo = $source->class_for("Foo");
     my $bar = $source->class_for("Bar");
@@ -27,8 +25,20 @@ tests "class_for" => sub {
     ok !$source->has_class("Baz");
 };
 
+tests "add_classes" => sub {
+    my $source = sim_source;
+
+    my @classes = (sim_class, sim_class);
+    $source->add_classes( @classes );
+
+    for my $class (@classes) {
+        ok $source->has_class($class->name);
+        is $class->source, $source;
+    }
+};
+
 tests "compiled" => sub {
-    my $source = Mite::Source->new( file => Path::Tiny->tempfile );
+    my $source = sim_source;
     my $compiled = $source->compiled;
 
     isa_ok $compiled, "Mite::Compiled";

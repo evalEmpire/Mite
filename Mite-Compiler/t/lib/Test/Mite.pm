@@ -48,7 +48,7 @@
     use warnings;
 
     use parent 'Exporter';
-    our @EXPORT = qw(mite_compile mite_load sim_source);
+    our @EXPORT = qw(mite_compile mite_load sim_source sim_class);
 
     use Test::Sims;
     use Method::Signatures;
@@ -68,18 +68,31 @@
         return join "::", map { rand_class_word() } (1..$num_words);
     };
 
+    # Because some things are stored as weak refs, automatically created
+    # sim objects can be deallocated if we don't hold a reference to them.
+    func _store_obj(Object $obj) {
+        state $storage = [];
+
+        push @$storage, $obj;
+
+        return $obj;
+    }
+
+    func sim_class(%args) {
+        $args{name}   //= rand_class_name();
+        $args{source} //= _store_obj( sim_source(
+            class_name  => $args{name}
+        ));
+
+        return $args{source}->class_for($args{name});
+    }
+
     func sim_source(%args) {
         # Keep all the sources in one directory simulating a
         # project library directory
         state $source_dir = Path::Tiny->tempdir;
 
-        my $class_name;
-        if( my $class = (values %{$args{classes}})[0] ) {
-            $class_name = $class->name;
-        }
-        else {
-            $class_name = rand_class_name();
-        }
+        my $class_name = delete $args{class_name} || rand_class_name();
 
         my $default_file = $source_dir->child(_class2pm($class_name));
         $default_file->parent->mkpath;
@@ -89,17 +102,9 @@
         );
 
         require Mite::Source;
-        my $source = Mite::Source->new(
+        return Mite::Source->new(
             %defaults, %args
         );
-
-        # Under normal operation, classes aren't passed into a
-        # source but added via class_for.  Add the source manually.
-        for my $class (values %{$source->classes}) {
-            $class->source($source);
-        }
-
-        return $source;
     }
 
     func _class2pm(Str $class) {
