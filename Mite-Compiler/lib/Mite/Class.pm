@@ -25,7 +25,7 @@ has name =>
   required      => 1;
 
 has source =>
-  is            => 'ro',
+  is            => 'rw',
   isa           => 'Mite::Source',
   # avoid a circular dep with Mite::Source
   weak_ref      => 1;

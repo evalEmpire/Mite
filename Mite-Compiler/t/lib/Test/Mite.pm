@@ -48,15 +48,63 @@
     use warnings;
 
     use parent 'Exporter';
-    our @EXPORT = qw(mite_compile mite_load);
+    our @EXPORT = qw(mite_compile mite_load sim_source);
 
+    use Test::Sims;
     use Method::Signatures;
     use Path::Tiny;
     use Child;
 
+    use utf8;
+    make_rand class_word => [qw(
+        Foo bar __9 h1N1 ünicode
+    )];
+
+    my $max_class_words = 5;
+    make_rand class_name => func() {
+        state $used_classes = {};
+
+        my $num_words = (int rand $max_class_words) + 1;
+        return join "::", map { rand_class_word() } (1..$num_words);
+    };
+
+    func sim_source(%args) {
+        # Keep all the sources in one directory simulating a
+        # project library directory
+        state $source_dir = Path::Tiny->tempdir;
+
+        my $class_name;
+        if( my $class = (values %{$args{classes}})[0] ) {
+            $class_name = $class->name;
+        }
+        else {
+            $class_name = rand_class_name();
+        }
+
+        my $default_file = $source_dir->child(_class2pm($class_name));
+        $default_file->parent->mkpath;
+        $default_file->touch;
+        my %defaults = (
+            file => $default_file
+        );
+
+        require Mite::Source;
+        my $source = Mite::Source->new(
+            %defaults, %args
+        );
+
+        # Under normal operation, classes aren't passed into a
+        # source but added via class_for.  Add the source manually.
+        for my $class (values %{$source->classes}) {
+            $class->source($source);
+        }
+
+        return $source;
+    }
+
     func _class2pm(Str $class) {
         my $pm = $class.'.pm';
-        $pm =~ s{::}{/};
+        $pm =~ s{::}{/}g;
 
         return $pm;
     }

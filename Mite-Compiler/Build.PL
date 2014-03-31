@@ -19,6 +19,7 @@ my $build = Module::Build->new(
     },
 
     build_requires => {
+        'Test::Sims'    => '20130412',
         'Test::Most'    => '0.31',
         'Test::Compile' => '0.24',
         Fennec          => '2.016',
