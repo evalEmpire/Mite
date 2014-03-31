@@ -8,11 +8,10 @@ use lib 't/lib';
 use Test::Mite;
 
 use Path::Tiny;
-use Mite::Class;
 use Mite::Attribute;
 
 after_case "Create a class to test with"=> sub {
-    my $class = Mite::Class->new(
+    my $class = sim_class(
         name            => 'Foo',
     );
 
