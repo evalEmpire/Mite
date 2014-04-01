@@ -61,7 +61,7 @@
     use parent 'Exporter';
     our @EXPORT = qw(
         mite_compile mite_load
-        sim_source sim_class sim_project
+        sim_source sim_class sim_project sim_attribute
         rand_class_name
     );
 
@@ -74,6 +74,10 @@
     make_rand class_word => [qw(
         Foo bar __9 h1N1 ünicode
     )];
+
+    func rand_method_name() {
+        return rand_class_word();
+    }
 
     my $max_class_words = 5;
     make_rand class_name => func() {
@@ -124,6 +128,29 @@
     func sim_project(%args) {
         require Mite::Project;
         return Mite::Project->new;
+    }
+
+    make_rand "attr_default" => [(
+        0, 1, "Foo", sub { [] }
+    )];
+
+    make_rand "attr_is" => [qw(ro rw)];
+
+    func set_sometimes(HashRef $thing, Str $key, CodeRef $func, Int :$when=2) {
+        return unless int rand $when;
+
+        $thing->{$key} //= $func->();
+
+        return;
+    }
+
+    func sim_attribute(%args) {
+        $args{name} //= rand_method_name;
+        set_sometimes(\%args, "is", \&rand_attr_is);
+        set_sometimes(\%args, "default", \&rand_attr_default);
+
+        require Mite::Attribute;
+        return Mite::Attribute->new( %args );
     }
 
     func _class2pm(Str $class) {
