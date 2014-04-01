@@ -14,10 +14,24 @@ has attributes =>
   isa           => 'HashRef[Mite::Attribute]',
   default       => sub { {} };
 
+# Super classes as class names
 has extends =>
   is            => 'rw',
-  isa           => 'ArrayRef',
-  default       => sub { [] };
+  isa           => 'ArrayRef[Str]',
+  default       => sub { [] },
+  trigger       => method(...) {
+      # Allow $self->parents to recalculate itself
+      $self->_clear_parents;
+  };
+
+# Super classes as Mite::Classes populated from $self->extends
+has parents =>
+  is            => 'ro',
+  isa           => 'ArrayRef[Mite::Class]',
+  # Build on demand to allow the project to load all the classes first
+  lazy          => 1,
+  builder       => '_build_parents',
+  clearer       => '_clear_parents';
 
 has name =>
   is            => 'ro',
@@ -36,6 +50,38 @@ method project() {
 
 method class($name) {
     return $self->project->class($name);
+}
+
+method _build_parents {
+    my $extends = $self->extends;
+    return [] if !@$extends;
+
+    # Load each parent and store its Mite::Class
+    my @parents;
+    for my $parent_name (@$extends) {
+        push @parents, $self->_get_parent($parent_name);
+    }
+
+    return \@parents;
+}
+
+method _get_parent($parent_name) {
+    my $project = $self->project;
+
+    # See if it's already loaded
+    my $parent = $project->class($parent_name);
+    return $parent if $parent;
+
+    # If not, try to load it
+    require $parent;
+    $parent = $project->class($parent_name);
+    return $parent if $parent;
+
+    croak <<"ERROR";
+$parent loaded but is not a Mite class.
+Extending non-Mite classes not yet supported.
+Sorry.
+ERROR
 }
 
 method add_attributes(Mite::Attribute @attributes) {
@@ -73,8 +119,8 @@ CODE
 }
 
 method _compile_extends() {
-    my $parents = $self->extends;
-    return '' unless @$parents;
+    my $extends = $self->extends;
+    return '' unless @$extends;
 
     my $source = $self->source;
 
@@ -82,9 +128,9 @@ method _compile_extends() {
                             map  { "require $_;" }
                             # Don't require a class from the same source
                             grep { !$source || !$source->has_class($_) }
-                            @$parents;
+                            @$extends;
 
-    my $isa_list     = join ", ", map { "q[$_]" } @$parents;
+    my $isa_list     = join ", ", map { "q[$_]" } @$extends;
 
     return <<"END";
 BEGIN {
