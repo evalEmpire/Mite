@@ -5,7 +5,9 @@ author:
 build_requires:
   Fennec: '2.016'
   Test::Compile: '0.24'
+  Test::Deep: '0.110'
   Test::Most: '0.31'
+  Test::Sims: '20130412'
 configure_requires:
   Module::Build: '0.42'
 dynamic_config: 1
@@ -20,11 +22,15 @@ provides:
     file: lib/Mite/Attribute.pm
   Mite::Class:
     file: lib/Mite/Class.pm
+  Mite::Compiled:
+    file: lib/Mite/Compiled.pm
   Mite::Compiler:
     file: lib/Mite/Compiler.pm
     version: v0.0.1
   Mite::Project:
     file: lib/Mite/Project.pm
+  Mite::Source:
+    file: lib/Mite/Source.pm
 requires:
   Method::Signatures: '20140224'
   Mite: v0.0.1
