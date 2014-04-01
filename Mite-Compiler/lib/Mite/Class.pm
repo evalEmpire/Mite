@@ -30,6 +30,14 @@ has source =>
   # avoid a circular dep with Mite::Source
   weak_ref      => 1;
 
+method project() {
+    return $self->source->project;
+}
+
+method class($name) {
+    return $self->project->class($name);
+}
+
 method add_attributes(Mite::Attribute @attributes) {
     for my $attribute (@attributes) {
         $self->attributes->{ $attribute->name } = $attribute;
