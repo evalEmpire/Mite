@@ -10,7 +10,7 @@ use Carp;
 class_type "Path::Tiny";
 
 has attributes =>
-  is            => 'rw',
+  is            => 'ro',
   isa           => 'HashRef[Mite::Attribute]',
   default       => sub { {} };
 
@@ -20,7 +20,7 @@ has extends =>
   default       => sub { [] };
 
 has name =>
-  is            => 'rw',
+  is            => 'ro',
   isa           => 'Str',
   required      => 1;
 
