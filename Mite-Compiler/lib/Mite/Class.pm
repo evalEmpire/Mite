@@ -77,6 +77,23 @@ method linear_isa() {
     return @{mro::get_linear_isa($self->name)};
 }
 
+method linear_parents() {
+    my $project = $self->project;
+
+    return map { $project->class($_) } $self->linear_isa;
+}
+
+method all_attributes() {
+    my %attributes;
+    for my $class (reverse $self->linear_parents) {
+        for my $attribute (values %{$class->attributes}) {
+            $attributes{$attribute->name} = $attribute;
+        }
+    }
+
+    return \%attributes;
+}
+
 method _build_parents {
     my $extends = $self->extends;
     return [] if !@$extends;
