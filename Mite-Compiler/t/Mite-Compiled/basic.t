@@ -1,11 +1,7 @@
 #!/usr/bin/perl
 
-use strict;
-use warnings;
 use lib 't/lib';
-
 use Test::Mite;
-use Path::Tiny;
 
 tests "new" => sub {
     my $source   = sim_source;

@@ -8,6 +8,17 @@
     use parent 'Fennec';
     use Method::Signatures;
 
+    # func, not a method, to avoid altering @_
+    func import(...) {
+        # Turn on strict, warnings and 5.10 features
+        strict->import;
+        warnings->import;
+        require feature;
+        feature->import(":5.10");
+
+        goto &Fennec::import;
+    }
+
     # Export our extra mite testing functions.
     method defaults($class: ...) {
         my %params = $class->SUPER::defaults;

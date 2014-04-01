@@ -1,9 +1,6 @@
 #!/usr/bin/perl
 
-use strict;
-use warnings;
 use lib 't/lib';
-
 use Test::Mite;
 
 tests "Many classes, one file" => sub {
