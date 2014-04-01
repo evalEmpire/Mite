@@ -19,10 +19,21 @@ tests "sim_source with class name" => sub {
     is_deeply $source->classes, {};
 };
 
+tests "sim sources in the same project" => sub {
+    is sim_source->project, sim_source->project;
+
+    require Mite::Project;
+    is sim_source->project, Mite::Project->default;
+};
+
 tests "sim_class" => sub {
     my $class = sim_class;
     ok $class->source->has_class($class->name);
     is $class->source->class_for($class->name), $class;
+};
+
+tests "sim_project" => sub {
+    isa_ok sim_project, "Mite::Project";
 };
 
 done_testing;

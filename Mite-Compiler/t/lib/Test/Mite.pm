@@ -114,7 +114,9 @@
         $default_file->touch;
         $args{file} //= $default_file;
 
-        $args{project} //= _store_obj(sim_project());
+        # Put everything in the same project, much more useful for testing.
+        require Mite::Project;
+        $args{project} //= Mite::Project->default;
 
         return $args{project}->source_for($args{file});
     }
