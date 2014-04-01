@@ -6,6 +6,7 @@ use Mouse::Util::TypeConstraints;
 use Method::Signatures;
 use Path::Tiny;
 use Carp;
+use mro;
 
 class_type "Path::Tiny";
 
@@ -20,6 +21,9 @@ has extends =>
   isa           => 'ArrayRef[Str]',
   default       => sub { [] },
   trigger       => method(...) {
+      # Set up our @ISA so we can use mro to calculate the class hierarchy
+      $self->_set_isa;
+
       # Allow $self->parents to recalculate itself
       $self->_clear_parents;
   };
@@ -50,6 +54,27 @@ method project() {
 
 method class($name) {
     return $self->project->class($name);
+}
+
+method _set_isa {
+    my $name = $self->name;
+
+    mro::set_mro($name, "c3");
+    no strict 'refs';
+    @{$name.'::ISA'} = @{$self->extends};
+
+    return;
+}
+
+method get_isa() {
+    my $name = $self->name;
+
+    no strict 'refs';
+    return @{$name.'::ISA'};
+}
+
+method linear_isa() {
+    return @{mro::get_linear_isa($self->name)};
 }
 
 method _build_parents {
@@ -136,6 +161,7 @@ method _compile_extends() {
 BEGIN {
     $require_list
 
+    use mro 'c3';
     our \@ISA;
     push \@ISA, $isa_list;
 }
