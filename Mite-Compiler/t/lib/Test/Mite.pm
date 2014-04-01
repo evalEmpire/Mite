@@ -8,11 +8,22 @@
     use parent 'Fennec';
     use Method::Signatures;
 
+    # func, not a method, to avoid altering @_
+    func import(...) {
+        # Turn on strict, warnings and 5.10 features
+        strict->import;
+        warnings->import;
+        require feature;
+        feature->import(":5.10");
+
+        goto &Fennec::import;
+    }
+
     # Export our extra mite testing functions.
     method defaults($class: ...) {
         my %params = $class->SUPER::defaults;
 
-        push @{ $params{utils} }, "Test::Mite::Functions";
+        push @{ $params{utils} }, "Test::Mite::Functions", "Test::Deep";
 
         return %params;
     }
@@ -48,15 +59,76 @@
     use warnings;
 
     use parent 'Exporter';
-    our @EXPORT = qw(mite_compile mite_load);
+    our @EXPORT = qw(
+        mite_compile mite_load
+        sim_source sim_class sim_project
+        rand_class_name
+    );
 
+    use Test::Sims;
     use Method::Signatures;
     use Path::Tiny;
     use Child;
 
+    use utf8;
+    make_rand class_word => [qw(
+        Foo bar __9 h1N1 ünicode
+    )];
+
+    my $max_class_words = 5;
+    make_rand class_name => func() {
+        state $used_classes = {};
+
+        my $num_words = (int rand $max_class_words) + 1;
+        return join "::", map { rand_class_word() } (1..$num_words);
+    };
+
+    # Because some things are stored as weak refs, automatically created
+    # sim objects can be deallocated if we don't hold a reference to them.
+    func _store_obj(Object $obj) {
+        state $storage = [];
+
+        push @$storage, $obj;
+
+        return $obj;
+    }
+
+    func sim_class(%args) {
+        $args{name}   //= rand_class_name();
+        $args{source} //= _store_obj( sim_source(
+            class_name  => $args{name}
+        ));
+
+        return $args{source}->class_for($args{name});
+    }
+
+    func sim_source(%args) {
+        # Keep all the sources in one directory simulating a
+        # project library directory
+        state $source_dir = Path::Tiny->tempdir;
+
+        my $class_name = delete $args{class_name} || rand_class_name();
+
+        my $default_file = $source_dir->child(_class2pm($class_name));
+        $default_file->parent->mkpath;
+        $default_file->touch;
+        $args{file} //= $default_file;
+
+        # Put everything in the same project, much more useful for testing.
+        require Mite::Project;
+        $args{project} //= Mite::Project->default;
+
+        return $args{project}->source_for($args{file});
+    }
+
+    func sim_project(%args) {
+        require Mite::Project;
+        return Mite::Project->new;
+    }
+
     func _class2pm(Str $class) {
         my $pm = $class.'.pm';
-        $pm =~ s{::}{/};
+        $pm =~ s{::}{/}g;
 
         return $pm;
     }

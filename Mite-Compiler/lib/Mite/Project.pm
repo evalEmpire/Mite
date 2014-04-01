@@ -14,7 +14,25 @@ has sources =>
   default       => sub { {} };
 
 method classes() {
-    return $self->sources->classes;
+    my %classes = map { %{$_->classes} }
+                  values %{$self->sources};
+    return \%classes;
+}
+
+# Careful not to create a class.
+method class($name) {
+    return $self->classes->{$name};
+}
+
+# Careful not to create a source.
+method source($file) {
+    return $self->sources->{$file};
+}
+
+method add_sources(@sources) {
+    for my $source (@sources) {
+        $self->sources->{$source->file} = $source;
+    }
 }
 
 method source_for($file) {
@@ -23,6 +41,7 @@ method source_for($file) {
 
     return $self->sources->{$file} ||= Mite::Source->new(
         file    => $file,
+        project => $self
     );
 }
 

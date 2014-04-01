@@ -1,10 +1,6 @@
 #!/usr/bin/perl -w
 
-use strict;
-use warnings;
-
 use lib 't/lib';
-
 use Test::Mite;
 
 use Mite::Project;

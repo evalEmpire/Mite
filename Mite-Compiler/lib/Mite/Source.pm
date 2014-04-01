@@ -57,17 +57,34 @@ has compiled =>
       return Mite::Compiled->new( source => $self );
   };
 
-method has_class($class) {
-    return defined $self->classes->{$class};
+has project =>
+  is            => 'rw',
+  isa           => 'Mite::Project',
+  # avoid a circular dep with Mite::Project
+  weak_ref      => 1;
+
+method has_class($name) {
+    return defined $self->classes->{$name};
 }
 
 method compile() {
     return $self->compiled->compile();
 }
 
-method class_for($class) {
-    return $self->classes->{$class} ||= Mite::Class->new(
-        name    => $class,
+# Add an existing class instance to this source
+method add_classes(@classes) {
+    for my $class (@classes) {
+        $self->classes->{$class->name} = $class;
+        $class->source($self);
+    }
+
+    return;
+}
+
+# Create or reuse a class instance for this source give a name
+method class_for($name) {
+    return $self->classes->{$name} ||= Mite::Class->new(
+        name    => $name,
         source  => $self,
     );
 }

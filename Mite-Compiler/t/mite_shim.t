@@ -1,10 +1,6 @@
 #!/usr/bin/env perl -w
 
-use strict;
-use warnings;
-
 use lib 't/lib';
-
 use Test::Mite;
 
 before_all "Load mite_shim" => sub {

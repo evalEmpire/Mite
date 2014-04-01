@@ -1,10 +1,6 @@
 #!/usr/bin/perl
 
-use strict;
-use warnings;
-
 use lib 't/lib';
-
 use Test::Mite;
 
 after_case "Setup class" => sub {
