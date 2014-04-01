@@ -41,6 +41,7 @@ method source_for($file) {
 
     return $self->sources->{$file} ||= Mite::Source->new(
         file    => $file,
+        project => $self
     );
 }
 

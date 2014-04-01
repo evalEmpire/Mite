@@ -50,7 +50,7 @@
     use parent 'Exporter';
     our @EXPORT = qw(
         mite_compile mite_load
-        sim_source sim_class
+        sim_source sim_class sim_project
         rand_class_name
     );
 
@@ -101,14 +101,16 @@
         my $default_file = $source_dir->child(_class2pm($class_name));
         $default_file->parent->mkpath;
         $default_file->touch;
-        my %defaults = (
-            file => $default_file
-        );
+        $args{file} //= $default_file;
 
-        require Mite::Source;
-        return Mite::Source->new(
-            %defaults, %args
-        );
+        $args{project} //= _store_obj(sim_project());
+
+        return $args{project}->source_for($args{file});
+    }
+
+    func sim_project(%args) {
+        require Mite::Project;
+        return Mite::Project->new;
     }
 
     func _class2pm(Str $class) {

@@ -47,4 +47,9 @@ tests "compiled" => sub {
     is $source->compiled, $compiled, "compiled is cached";
 };
 
+tests "project" => sub {
+    my $source = sim_source;
+    isa_ok $source->project, "Mite::Project";
+};
+
 done_testing;

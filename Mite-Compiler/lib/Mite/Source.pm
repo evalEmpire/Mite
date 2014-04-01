@@ -57,6 +57,12 @@ has compiled =>
       return Mite::Compiled->new( source => $self );
   };
 
+has project =>
+  is            => 'rw',
+  isa           => 'Mite::Project',
+  # avoid a circular dep with Mite::Project
+  weak_ref      => 1;
+
 method has_class($name) {
     return defined $self->classes->{$name};
 }
