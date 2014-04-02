@@ -177,6 +177,10 @@
         my $process = $child->start;
         $process->wait;
 
+        if( my $child_exit = $process->exit_status ) {
+            die "Compiling returned exit code $child_exit";
+        }
+
         return $file;
     }
 
@@ -184,7 +188,9 @@
         my $file = mite_compile($code);
 
         # Allow the same file to be recompiled and reloaded
-        return do $file;
+        do $file;
+
+        return $file;
     }
 
     # We're loaded, really!
