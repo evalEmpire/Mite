@@ -83,15 +83,25 @@ method linear_parents() {
     return map { $project->class($_) } $self->linear_isa;
 }
 
-method all_attributes() {
+method chained_attributes(@classes) {
     my %attributes;
-    for my $class (reverse $self->linear_parents) {
+    for my $class (reverse @classes) {
         for my $attribute (values %{$class->attributes}) {
             $attributes{$attribute->name} = $attribute;
         }
     }
 
     return \%attributes;
+}
+
+method all_attributes() {
+    return $self->chained_attributes($self->linear_parents);
+}
+
+method parents_attributes() {
+    my @parents = $self->linear_parents;
+    shift @parents;  # remove ourselves from the inheritance list
+    return $self->chained_attributes(@parents);
 }
 
 method _build_parents {
