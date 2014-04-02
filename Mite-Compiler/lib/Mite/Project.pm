@@ -65,13 +65,20 @@ method inject_mite_functions(:$package, :$file) {
 
     no strict 'refs';
     *{ $package .'::has' } = func( $name, %args ) {
-        require Mite::Attribute;
-        my $attribute = Mite::Attribute->new(
-            name => $name,
-            %args
-        );
-
-        $class->add_attribute($attribute);
+        if( my $is_extension = $name =~ s{^\+}{} ) {
+            $class->extend_attribute(
+                name    => $name,
+                %args
+            );
+        }
+        else {
+            require Mite::Attribute;
+            my $attribute = Mite::Attribute->new(
+                name    => $name,
+                %args
+            );
+            $class->add_attribute($attribute);
+        }
 
         return;
     };
