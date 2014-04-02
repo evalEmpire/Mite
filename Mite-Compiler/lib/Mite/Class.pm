@@ -229,7 +229,12 @@ sub new {
 CODE
 }
 
+method _compile_undef_default($attribute) {
+    return sprintf '$self->{%s} //= undef;', $attribute->name;
+}
+
 method _compile_simple_default($attribute) {
+    return $self->_compile_undef_default($attribute) if !defined $attribute->default;
     return sprintf '$self->{%s} //= q[%s];', $attribute->name, $attribute->default;
 }
 
