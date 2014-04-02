@@ -148,6 +148,21 @@ method add_attributes(Mite::Attribute @attributes) {
     *add_attribute = \&add_attributes;
 }
 
+
+method extend_attribute(%attr_args) {
+    my $name = delete $attr_args{name};
+
+    my $parent_attr = $self->parents_attributes->{$name};
+    croak(sprintf <<'ERROR', $name, $self->name) unless $parent_attr;
+Could not find an attribute by the name of '%s' to inherit from in %s
+ERROR
+
+    $self->add_attribute($parent_attr->clone(%attr_args));
+
+    return;
+}
+
+
 method compile() {
     return join "\n", '{',
                       $self->_compile_package,

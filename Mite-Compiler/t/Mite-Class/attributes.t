@@ -51,4 +51,27 @@ tests "all_attributes" => sub {
     cmp_deeply $gparent->parents_attributes, {};
 };
 
+
+tests "extend_attribute" => sub {
+    my $gparent = sim_class( name => "GP1" );
+    my $parent  = sim_class( name => "P1" );
+    my $child   = sim_class( name => "C1" );
+
+    $parent->extends(["GP1"]);
+    $child->extends(["P1"]);
+
+    $gparent->add_attributes(
+        sim_attribute( name => "foo", is => "ro", default => 23 ),
+    );
+    $child->extend_attribute(
+        name    => "foo",
+        default => sub { 99 }
+    );
+
+    my $extended_attribute = $child->attributes->{foo};
+    is $extended_attribute->name,       "foo";
+    is $extended_attribute->is,         "ro";
+    is $extended_attribute->default->(), 99;
+};
+
 done_testing;
