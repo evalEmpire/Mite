@@ -27,6 +27,18 @@ has name =>
   isa           => 'Str',
   required      => 1;
 
+method clone(%args) {
+    $args{name} //= $self->name;
+    $args{is}   //= $self->is;
+
+    # Because undef is a valid default
+    $args{default} = $self->default if !exists $args{default} and $self->has_default;
+
+    return $self->new(
+        %args
+    );
+}
+
 method has_dataref_default() {
     # We don't have a default
     return 0 unless $self->has_default;

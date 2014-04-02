@@ -83,15 +83,25 @@ method linear_parents() {
     return map { $project->class($_) } $self->linear_isa;
 }
 
-method all_attributes() {
+method chained_attributes(@classes) {
     my %attributes;
-    for my $class (reverse $self->linear_parents) {
+    for my $class (reverse @classes) {
         for my $attribute (values %{$class->attributes}) {
             $attributes{$attribute->name} = $attribute;
         }
     }
 
     return \%attributes;
+}
+
+method all_attributes() {
+    return $self->chained_attributes($self->linear_parents);
+}
+
+method parents_attributes() {
+    my @parents = $self->linear_parents;
+    shift @parents;  # remove ourselves from the inheritance list
+    return $self->chained_attributes(@parents);
 }
 
 method _build_parents {
@@ -137,6 +147,21 @@ method add_attributes(Mite::Attribute @attributes) {
     no warnings 'once';
     *add_attribute = \&add_attributes;
 }
+
+
+method extend_attribute(%attr_args) {
+    my $name = delete $attr_args{name};
+
+    my $parent_attr = $self->parents_attributes->{$name};
+    croak(sprintf <<'ERROR', $name, $self->name) unless $parent_attr;
+Could not find an attribute by the name of '%s' to inherit from in %s
+ERROR
+
+    $self->add_attribute($parent_attr->clone(%attr_args));
+
+    return;
+}
+
 
 method compile() {
     return join "\n", '{',
@@ -204,7 +229,12 @@ sub new {
 CODE
 }
 
+method _compile_undef_default($attribute) {
+    return sprintf '$self->{%s} //= undef;', $attribute->name;
+}
+
 method _compile_simple_default($attribute) {
+    return $self->_compile_undef_default($attribute) if !defined $attribute->default;
     return sprintf '$self->{%s} //= q[%s];', $attribute->name, $attribute->default;
 }
 
