@@ -186,13 +186,7 @@ END
 }
 
 method _compile_bless() {
-    if( @{$self->extends} ) {
-        # Ensure we get their defaults.
-        return '$class->SUPER::new(%args)';
-    }
-    else {
-        return 'bless \%args, $class';
-    }
+    return 'bless \%args, $class';
 }
 
 method _compile_new() {
@@ -231,24 +225,24 @@ method _compile_defaults {
 }
 
 method _attributes_with_defaults() {
-    return grep { $_->has_default } values %{$self->attributes};
+    return grep { $_->has_default } values %{$self->all_attributes};
 }
 
 method _attributes_with_simple_defaults() {
-    return grep { $_->has_simple_default } values %{$self->attributes};
+    return grep { $_->has_simple_default } values %{$self->all_attributes};
 }
 
 method _attributes_with_coderef_defaults() {
-    return grep { $_->has_coderef_default } values %{$self->attributes};
+    return grep { $_->has_coderef_default } values %{$self->all_attributes};
 }
 
 method _attributes_with_dataref_defaults() {
-    return grep { $_->has_dataref_default } values %{$self->attributes};
+    return grep { $_->has_dataref_default } values %{$self->all_attributes};
 }
 
 method _compile_attributes() {
     my $code = '';
-    for my $attribute (values %{$self->attributes}) {
+    for my $attribute (values %{$self->all_attributes}) {
         $code .= $attribute->compile;
     }
 
