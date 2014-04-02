@@ -12,9 +12,9 @@ tests "class() and source()" => sub {
     $project->add_sources(@sources);
 
     my @classes = (
-        $sources[0]->class_for(rand_class_name),
-        $sources[1]->class_for(rand_class_name),
-        $sources[1]->class_for(rand_class_name)
+        $sources[0]->class_for( "Foo" ),
+        $sources[1]->class_for( "Bar" ),
+        $sources[1]->class_for( "Baz" )
     );
 
     cmp_deeply $project->classes, {

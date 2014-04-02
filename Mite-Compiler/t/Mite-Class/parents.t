@@ -19,6 +19,7 @@ tests "parents as objects" => sub {
     cmp_deeply $child->parents, \@parents;
     cmp_deeply [$child->get_isa],    [map { $_->name } @parents];
     cmp_deeply [$child->linear_isa], [$child->name, map { $_->name } @parents];
+    cmp_deeply [$child->linear_parents], [$child, @parents];
 
 
     # Test parents is reset when extends is reset
@@ -30,6 +31,7 @@ tests "parents as objects" => sub {
     cmp_deeply $child->parents, \@new_parents, "YOU'RE NOT MY REAL PARENTS!!";
     cmp_deeply [$child->get_isa],    [map { $_->name } @new_parents];
     cmp_deeply [$child->linear_isa], [$child->name, map { $_->name } @new_parents];
+    cmp_deeply [$child->linear_parents], [$child, @new_parents];
 
     # Test diamond inheritance, ensure C3 style is in use
     my $grand_parent = sim_class( name => "GP1" );
