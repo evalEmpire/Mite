@@ -39,7 +39,10 @@ sub import {
             Carp::croak("Compiled Mite file ($mite_file) for $file is missing");
         }
 
-        require $mite_file;
+        {
+            local @INC = ('.', @INC);
+            require $mite_file;
+        }
 
         no strict 'refs';
         *{ $caller .'::has' } = sub {
@@ -135,7 +138,7 @@ before you run it.  This is done with the C<mite> program.
 
 =head3 4. Make sure the mite files are in your MANIFEST
 
-The compiled F<Foo.mite> files must ship with your code, so make
+The compiled F<.mite.pm> files must ship with your code, so make
 sure they get picked up in your MANIFEST file.
 
 =head3 5. Ship normally

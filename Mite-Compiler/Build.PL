@@ -16,6 +16,8 @@ my $build = Module::Build->new(
         Mouse                   => '1.08',
         'Method::Signatures'    => '20140224',
         'Path::Tiny'            => '0.052',
+        'App::Cmd'              => '0.323',
+        'MouseX::Foreign'       => '0.008',
     },
 
     build_requires => {
@@ -23,6 +25,7 @@ my $build = Module::Build->new(
         'Test::Most'    => '0.31',
         'Test::Deep'    => '0.110',
         'Test::Compile' => '0.24',
+        'Test::Output'  => '1.02',
         Fennec          => '2.016',
     },
 
