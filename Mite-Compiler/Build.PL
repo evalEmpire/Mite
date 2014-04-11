@@ -25,6 +25,7 @@ my $build = Module::Build->new(
         'Test::Most'    => '0.31',
         'Test::Deep'    => '0.110',
         'Test::Compile' => '0.24',
+        'Test::Output'  => '1.02',
         Fennec          => '2.016',
     },
 

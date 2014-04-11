@@ -32,7 +32,7 @@ has config_file =>
   };
 
 has data =>
-  is            => 'ro',
+  is            => 'rw',
   isa           => 'HashRef',
   lazy          => 1,
   default       => method {
