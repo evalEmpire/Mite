@@ -3,7 +3,7 @@
 use lib 't/lib';
 use Test::Mite;
 
-after_case "Setup class for testing" => sub {
+before_all "Setup class for testing" => sub {
     package Foo;
     use Mouse;
     with 'Mite::Role::HasYAML';
