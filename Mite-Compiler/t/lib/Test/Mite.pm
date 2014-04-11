@@ -67,6 +67,7 @@
         mite_compile mite_load
         sim_source sim_class sim_project sim_attribute
         rand_class_name
+        mite_command
     );
 
     use Test::Sims;
@@ -195,6 +196,20 @@
         do $file;
 
         return $file;
+    }
+
+    func mite_command(@args) {
+        # Avoid polluting the testing environment
+        my $child = Child->new(sub {
+            require Mite::App;
+            my $app = Mite::App->new;
+            $app->execute_command( $app->prepare_command(@args) );
+        });
+
+        my $process = $child->start;
+        $process->wait;
+
+        return;
     }
 
     # We're loaded, really!
