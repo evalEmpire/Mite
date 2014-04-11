@@ -2,6 +2,8 @@ package Mite::Project;
 
 use v5.10;
 use Mouse;
+with qw(Mite::Role::HasConfig);
+
 use Method::Signatures;
 use Path::Tiny;
 
@@ -110,26 +112,51 @@ method load_files(Defined @files) {
     return;
 }
 
-method load_directories(Defined @dirs) {
-    my @files = $self->_recurse_directories(@dirs);
-    $self->load_files(@files);
+method find_pms($dir=$self->config->data->{source_from}) {
+    return $self->_recurse_directory(
+        $dir,
+        func($path) {
+            return if -d $path;
+            return unless $path =~ m{\.pm$};
+            return if $path =~ m{\.mite\.pm$};
+            return 1;
+        }
+    );
+}
+
+method load_directory($dir=$self->config->data->{source_from}) {
+    $self->load_files( $self->find_pms($dir) );
+
+    return;
+}
+
+method find_mites($dir=$self->config->data->{compiled_to}) {
+    return $self->_recurse_directory(
+        $dir,
+        func($path) {
+            return if -d $path;
+            return 1 if $path =~ m{\.mite\.pm$};
+            return;
+        }
+    );
+}
+
+method clean_mites($dir=$self->config->data->{compiled_to}) {
+    for my $file ($self->find_mites($dir)) {
+        path($file)->remove;
+    }
 
     return;
 }
 
 # Recursively gather all the pm files in a directory
-method _recurse_directories(Defined @dirs) {
+method _recurse_directory(Str $dir, CodeRef $check) {
     my @pm_files;
 
-    for my $dir (@dirs) {
-        my $iter = path($dir)->iterator({ recurse => 1, follow_symlinks => 1 });
-
-        while( my $path = $iter->() ) {
-            next if -d $path;
-            next unless $path =~ m{\.pm$};
-
-            push @pm_files, $path;
-        }
+    my $iter = path($dir)->iterator({ recurse => 1, follow_symlinks => 1 });
+    while( my $path = $iter->() ) {
+        next unless $check->($path);
+        push @pm_files, $path;
     }
 
     return @pm_files;
