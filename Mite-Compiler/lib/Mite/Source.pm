@@ -31,6 +31,7 @@ L<Mite::Class>, L<Mite::Compiled>, L<Mite::Project>
 
 use v5.10;
 use Mouse;
+use Mite::Types;
 
 use Mite::Compiled;
 use Mite::Class;
@@ -41,7 +42,8 @@ class_type 'Path::Tiny';
 
 has file =>
   is            => 'ro',
-  isa           => 'Str|Path::Tiny',
+  isa           => 'Path',
+  coerce        => 1,
   required      => 1;
 
 has classes =>

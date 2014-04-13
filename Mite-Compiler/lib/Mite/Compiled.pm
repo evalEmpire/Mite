@@ -26,6 +26,7 @@ L<Mite::Source>, L<Mite::Class>, L<Mite::Project>
 
 use v5.10;
 use Mouse;
+use Mite::Types;
 
 # Don't load Mite::Source else it will go circular
 use Method::Signatures;
@@ -36,7 +37,8 @@ class_type 'Path::Tiny';
 
 has file =>
   is            => 'ro',
-  isa           => 'Str|Path::Tiny',
+  isa           => 'Path',
+  coerce        => 1,
   lazy          => 1,
   default       => method {
       return $self->_source_file2compiled_file( $self->source->file );
@@ -59,12 +61,11 @@ method compile() {
 }
 
 method write() {
-    my $file = path($self->file);
-    return $file->spew_utf8($self->compile);
+    return $self->file->spew_utf8($self->compile);
 }
 
 method remove() {
-    return path($self->file)->remove;
+    return $self->file->remove;
 }
 
 method classes() {

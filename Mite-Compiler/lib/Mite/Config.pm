@@ -5,6 +5,7 @@ use v5.10;
 use Mouse;
 with qw(Mite::Role::HasYAML);
 
+use Mite::Types;
 use Path::Tiny;
 use Method::Signatures;
 use Carp;
@@ -16,7 +17,8 @@ has mite_dir_name =>
 
 has mite_dir =>
   is            => 'ro',
-  isa           => 'Path::Tiny',
+  isa           => 'Path',
+  coerce        => 1,
   lazy          => 1,
   default       => method {
       return $self->find_mite_dir ||
@@ -25,7 +27,8 @@ has mite_dir =>
 
 has config_file =>
   is            => 'ro',
-  isa           => 'Path::Tiny',
+  isa           => 'Path',
+  coerce        => 1,
   lazy          => 1,
   default       => method {
       return $self->mite_dir->child("config");

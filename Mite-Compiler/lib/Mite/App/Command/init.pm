@@ -7,6 +7,7 @@ use MouseX::Foreign;
 extends qw(Mite::App::Command);
 with qw(Mite::Role::HasConfig);
 
+use Mite::Types;
 use Method::Signatures;
 use Path::Tiny;
 use Carp;
@@ -17,14 +18,16 @@ has project_name =>
 
 has source_dir =>
   is            => 'ro',
-  isa           => 'Path::Tiny',
+  isa           => 'Path',
+  coerce        => 1,
   default       => method {
       return path("lib/");
   };
 
 has compile_dir =>
   is            => 'ro',
-  isa           => 'Path::Tiny',
+  isa           => 'Path',
+  coerce        => 1,
   default       => method {
       return path("lib/");
   };
