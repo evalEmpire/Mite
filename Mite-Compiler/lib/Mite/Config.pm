@@ -46,8 +46,8 @@ method make_mite_dir($dir=Path::Tiny->cwd) {
     return path($dir)->child($self->mite_dir_name)->mkpath;
 }
 
-method write_config() {
-    $self->config_file->spew_utf8( $self->yaml_dump( $self->data ) );
+method write_config(HashRef $data=$self->data) {
+    $self->config_file->spew_utf8( $self->yaml_dump( $data ) );
     return;
 }
 

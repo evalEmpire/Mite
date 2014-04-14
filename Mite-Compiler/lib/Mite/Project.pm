@@ -162,4 +162,24 @@ method _recurse_directory(Str $dir, CodeRef $check) {
     return @pm_files;
 }
 
+method init_project($project_name) {
+    $self->config->make_mite_dir;
+    $self->write_default_config(
+        $project_name
+    ) if !-e $self->config->config_file;
+    return;
+}
+
+method write_default_config(Str $project_name, %args) {
+    my $libdir = path('lib');
+    $self->config->write_config({
+        project         => $project_name,
+        shim            => $project_name.'::Mite',
+        source_from     => $libdir.'',
+        compiled_to     => $libdir.'',
+        %args
+    });
+    return;
+}
+
 1;
