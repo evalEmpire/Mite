@@ -1,9 +1,0 @@
-Build.PL
-lib/Mite.pm
-LICENSE
-MANIFEST			This list of files
-MANIFEST.SKIP
-META.json
-META.yml
-README
-t/00compile.t

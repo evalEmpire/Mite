@@ -6,17 +6,17 @@ use Test::Mite;
 tests "has +foo" => sub {
     mite_load <<'CODE';
 package GP1;
-use Mite;
+use Mite::Shim;
 has foo =>
     is      => 'ro',
     default => 23;
 
 package P1;
-use Mite;
+use Mite::Shim;
 extends 'GP1';
 
 package C1;
-use Mite;
+use Mite::Shim;
 extends 'P1';
 has "+foo" =>
     default => "child default";

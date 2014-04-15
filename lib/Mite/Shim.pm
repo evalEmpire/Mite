@@ -1,4 +1,4 @@
-package Mite;
+package Mite::Shim;
 
 # NOTE: Since the intention is to ship this file with a project, this file
 # cannot have any non-core dependencies.
@@ -68,14 +68,14 @@ sub import {
 
 =head1 NAME
 
-Mite - Moose-like OO with no dependencies
+Mite::Shim - Moose-like OO with no dependencies
 
 =head1 SYNOPSIS
 
-    package Foo;
+    $ mite init Foo
 
-    # Mite roles do not require anything special to use
-    use Foo::Some::Role;
+    $ cat lib/Foo.pm
+    package Foo;
 
     # Load the Mite shim
     use Foo::Mite;
@@ -86,13 +86,12 @@ Mite - Moose-like OO with no dependencies
     # A read/write string attribute
     has "attribute";
 
-    # A read-only integer attribute with a default
-    has another_attribute => (
+    # A read-only attribute with a default
+    has another_attribute =>
         is      => 'ro',
-        type    => 'Int',
-        default => 1
-    );
+        default => 1;
 
+    $ mite compile
 
 =head1 DESCRIPTION
 
@@ -230,8 +229,6 @@ subclasses, are stuck using Moose or Mouse forever.
 
 
 =head1 SEE ALSO
-
-L<Mite::Compiler> is what you need to develop with Mite.
 
 L<Mouse> is a forward-compatible version of Moose with no dependencies.
 

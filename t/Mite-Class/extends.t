@@ -6,18 +6,18 @@ use Test::Mite;
 tests "single inheritance and defaults" => sub {
     mite_load <<'CODE';
 package GP1;
-use Mite;
+use Mite::Shim;
 has foo =>
     default => 23;
 
 package P1;
-use Mite;
+use Mite::Shim;
 extends 'GP1';
 has foo =>
     default => 42;
 
 package C1;
-use Mite;
+use Mite::Shim;
 extends 'P1';
 has "bar";
 
@@ -38,24 +38,24 @@ CODE
 tests "multiple inheritance and defaults" => sub {
     mite_load <<'CODE';
 package GP1;
-use Mite;
+use Mite::Shim;
 has foo =>
     default => "gp1 foo default";
 
 package P1;
-use Mite;
+use Mite::Shim;
 extends 'GP1';
 has bar =>
     default => "p1 bar default";
 
 package P2;
-use Mite;
+use Mite::Shim;
 extends 'GP1';
 has foo =>
     default => "p2 foo default";
 
 package C1;
-use Mite;
+use Mite::Shim;
 extends 'P1', 'P2';
 has "bar";
 

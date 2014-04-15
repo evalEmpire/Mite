@@ -14,7 +14,7 @@ tests "compile" => sub {
 
     path("lib/Foo.pm")->spew(<<'CODE');
 package Foo;
-use Mite;
+use Mite::Shim;
 
 has "foo";
 has "bar";
@@ -24,7 +24,7 @@ CODE
 
     path("lib/Foo/Bar.pm")->spew(<<'CODE');
 package Foo::Bar;
-use Mite;
+use Mite::Shim;
 extends 'Foo';
 
 has "baz" =>

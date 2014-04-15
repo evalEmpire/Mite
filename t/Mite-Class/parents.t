@@ -48,18 +48,18 @@ tests "c3 inheritance" => sub {
     # Set up diamond inheritance
     mite_load <<'CODE';
 package GP;
-use Mite;
+use Mite::Shim;
 
 package P1;
-use Mite;
+use Mite::Shim;
 extends "GP";
 
 package P2;
-use Mite;
+use Mite::Shim;
 extends "GP";
 
 package C1;
-use Mite;
+use Mite::Shim;
 extends "P1", "P2";
 
 1;

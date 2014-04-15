@@ -6,7 +6,7 @@ use Test::Mite;
 after_case "Setup class" => sub {
     mite_load(<<'CODE');
 package Foo;
-use Mite;
+use Mite::Shim;
 
 # For lexical environment test
 use strict;

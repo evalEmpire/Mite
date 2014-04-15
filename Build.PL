@@ -12,20 +12,25 @@ my $build = Module::Build->new(
     requires => {
         'perl'                  => '5.10.1',
         version                 => '0.77',
-    },
-
-    recommends => {
-        "Class::XSAccessor"     => '1.17',
+        Mouse                   => '1.08',
+        'Method::Signatures'    => '20140224',
+        'Path::Tiny'            => '0.052',
+        'App::Cmd'              => '0.323',
+        'MouseX::Foreign'       => '0.008',
     },
 
     build_requires => {
-        'Test::More'            => '0.88',
+        'Test::Sims'    => '20130412',
+        'Test::Most'    => '0.31',
+        'Test::Deep'    => '0.110',
+        'Test::Compile' => '0.24',
+        'Test::Output'  => '1.02',
+        Fennec          => '2.016',
     },
 
     recursive_test_files => 1,
 
     create_license      => 1,
-    create_readme       => 1,
 
     meta_merge => {
         resources => {

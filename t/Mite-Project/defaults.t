@@ -6,7 +6,7 @@ use Test::Mite;
 tests "undef default" => sub {
     mite_load <<'CODE';
 package Foo;
-use Mite;
+use Mite::Shim;
 
 has foo =>
     default => undef;

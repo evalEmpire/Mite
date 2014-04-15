@@ -6,7 +6,7 @@ use warnings;
 use Test::More;
 
 note "Can Mite find the compiled code"; {
-    local @INC = ("t/lib", @INC);
+    local @INC = ("t/Mite-Shim/lib", @INC);
     require_ok 'Foo';
 
     my $obj = new_ok "Foo";

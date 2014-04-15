@@ -6,12 +6,12 @@ use Test::Mite;
 tests "Many classes, one file" => sub {
     mite_load(<<'CODE');
 package Foo;
-use Mite;
+use Mite::Shim;
 has 'things' =>
     default => 42;
 
 package Bar;
-use Mite;
+use Mite::Shim;
 extends 'Foo';
 has 'stuff' =>
     default => 23;

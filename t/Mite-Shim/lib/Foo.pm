@@ -1,6 +1,6 @@
 package Foo;
 
-use Mite;
+use Mite::Shim;
 
 has thing =>
   default => 23;

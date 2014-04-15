@@ -7,7 +7,7 @@ tests "basic compilation" => sub {
     mite_load(<<'CODE');
 package Foo;
 
-use Mite;
+use Mite::Shim;
 
 has things =>
     default => 23;
