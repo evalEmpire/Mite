@@ -37,9 +37,6 @@ use Mite::Compiled;
 use Mite::Class;
 use Method::Signatures;
 
-use Mouse::Util::TypeConstraints;
-class_type 'Path::Tiny';
-
 has file =>
   is            => 'ro',
   isa           => 'Path',
