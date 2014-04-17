@@ -6,6 +6,7 @@ with qw(Mite::Role::HasConfig);
 
 use Method::Signatures;
 use Path::Tiny;
+use Carp;
 
 use Mite::Source;
 use Mite::Class;
@@ -164,10 +165,57 @@ method _recurse_directory(Str $dir, CodeRef $check) {
 
 method init_project($project_name) {
     $self->config->make_mite_dir;
+
     $self->write_default_config(
         $project_name
     ) if !-e $self->config->config_file;
+
     return;
+}
+
+method add_mite_shim() {
+    my $shim_file = $self->_project_shim_file;
+    $shim_file->parent->mkpath;
+
+    my $shim_package = $self->config->data->{shim};
+    $shim_file->spew(<<"OUT");
+{
+    package $shim_package;
+    BEGIN { our \@ISA = qw(Mite::Shim); }
+}
+
+OUT
+
+    my $src_shim = $self->_find_mite_shim;
+    $shim_file->append( $src_shim->slurp );
+
+    return $shim_file;
+}
+
+method _project_shim_file() {
+    my $config = $self->config;
+    my $shim_package = $config->data->{shim};
+    my $shim_dir     = $config->data->{source_from};
+
+    my $shim_file = $shim_package;
+    $shim_file =~ s{::}{/}g;
+    $shim_file .= ".pm";
+    return path($shim_dir, $shim_file);
+}
+
+method _find_mite_shim() {
+    for my $dir (@INC) {
+        # Avoid code refs in @INC
+        next if ref $dir;
+
+        my $shim = path($dir, "Mite", "Shim.pm");
+        return $shim if -e $shim;
+    }
+
+    croak <<"ERROR";
+Can't locate Mite::Shim in \@INC.  \@INC contains:
+@{[ map { "  $_\n" } grep { !ref($_) } @INC ]}
+ERROR
 }
 
 method write_default_config(Str $project_name, %args) {

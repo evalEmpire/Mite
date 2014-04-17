@@ -1,7 +1,6 @@
 .perlcriticrc
 .perltidyrc
 bin/mite
-bin/mite_shim
 Build.PL
 lib/Mite.pm
 lib/Mite/App.pm
@@ -53,7 +52,6 @@ t/Mite-Source/basic.t
 t/mite/clean.t
 t/mite/compile.t
 t/mite/init.t
-t/mite_shim.t
 t/multiple_classes_one_file.t
 t/Roles/HasConfig.t
 t/Roles/HasYAML.t
