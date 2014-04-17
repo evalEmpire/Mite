@@ -17,6 +17,7 @@ my $build = Module::Build->new(
         'Path::Tiny'            => '0.052',
         'App::Cmd'              => '0.323',
         'MouseX::Foreign'       => '0.008',
+        'YAML::XS'              => '0.41',
     },
 
     build_requires => {
