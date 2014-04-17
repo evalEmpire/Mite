@@ -152,6 +152,10 @@ method clean_mites($dir=$self->config->data->{compiled_to}) {
     return;
 }
 
+method clean_shim() {
+    return $self->_project_shim_file->remove;
+}
+
 # Recursively gather all the pm files in a directory
 method _recurse_directory(Str $dir, CodeRef $check) {
     my @pm_files;

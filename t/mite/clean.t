@@ -8,20 +8,32 @@ use Test::Mite;
 
 use Mite::Project;
 
-tests "find_pms and mites" => sub {
+tests "clean" => sub {
     my $orig_dir = Path::Tiny->cwd;
     my $dir = Path::Tiny->tempdir;
 
     chdir $dir;
 
     $dir->child("lib", "Foo")->mkpath;
-    $dir->child("lib", "Foo.pm")->touch;
-    $dir->child("lib", "Foo", "Bar.pm")->touch;
+    $dir->child("lib", "Foo.pm")->spew(<<CODE);
+package Foo;
+use Foo::Mite;
+
+has "something";
+
+1;
+CODE
+
+    $dir->child("lib", "Foo", "Bar.pm")->spew(<<CODE);
+package Foo::Bar;
+use Foo::Mite;
+extends "Foo";
+
+1;
+CODE
 
     mite_command "init", "Foo";
-
-    $dir->child("lib", "Foo.pm.mite.pm")->touch;
-    $dir->child("lib", "Foo", "Bar.pm.mite.pm")->touch;
+    mite_command "compile";
 
     my $project = Mite::Project->default;
 

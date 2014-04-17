@@ -17,6 +17,7 @@ method execute($opt, $args) {
     require Mite::Project;
     my $project = Mite::Project->default;
     $project->clean_mites;
+    $project->clean_shim;
 
     return;
 }
