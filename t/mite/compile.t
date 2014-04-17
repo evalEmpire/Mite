@@ -14,7 +14,7 @@ tests "compile" => sub {
 
     path("lib/Foo.pm")->spew(<<'CODE');
 package Foo;
-use Mite::Shim;
+use Foo::Mite;
 
 has "foo";
 has "bar";
@@ -24,7 +24,7 @@ CODE
 
     path("lib/Foo/Bar.pm")->spew(<<'CODE');
 package Foo::Bar;
-use Mite::Shim;
+use Foo::Mite;
 extends 'Foo';
 
 has "baz" =>
@@ -34,6 +34,8 @@ has "baz" =>
 CODE
 
     mite_command("compile");
+
+    ok -e "lib/Foo/Mite.pm";
 
     local @INC = ("lib", @INC);
     require_ok 'Foo';

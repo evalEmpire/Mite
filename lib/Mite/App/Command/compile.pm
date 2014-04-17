@@ -16,6 +16,8 @@ method abstract() {
 method execute($opt, $args) {
     require Mite::Project;
     my $project = Mite::Project->default;
+
+    $project->add_mite_shim;
     $project->load_directory;
     $project->write_mites;
 
