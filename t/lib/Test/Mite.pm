@@ -37,6 +37,8 @@
 
     # Test with and without Class::XSAccessor.
     method after_import($class: $info) {
+        return unless $info->{meta}{with_recommends};
+
         # Test the pure Perl implementation.
         $info->{layer}->add_case(
             [$info->{importer}, __FILE__, __LINE__ + 1],

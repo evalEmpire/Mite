@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 use lib 't/lib';
-use Test::Mite;
+use Test::Mite with_recommends => 1;
 
 after_case "Setup class" => sub {
     mite_load(<<'CODE');
