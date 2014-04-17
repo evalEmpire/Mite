@@ -212,6 +212,10 @@
         my $process = $child->start;
         $process->wait;
 
+        if( my $child_exit = $process->exit_status ) {
+            die "Compiling returned exit code $child_exit";
+        }
+
         return;
     }
 
