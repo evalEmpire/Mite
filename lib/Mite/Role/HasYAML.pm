@@ -1,6 +1,6 @@
 package Mite::Role::HasYAML;
 
-use v5.10;
+use feature ':5.10';
 use Mouse::Role;
 use Method::Signatures;
 

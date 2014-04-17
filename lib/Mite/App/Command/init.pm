@@ -1,6 +1,6 @@
 package Mite::App::Command::init;
 
-use v5.10;
+use feature ':5.10';
 
 use Mouse;
 use MouseX::Foreign;

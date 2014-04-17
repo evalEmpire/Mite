@@ -11,7 +11,7 @@ use Mite::Shim;
 # For lexical environment test
 use strict;
 use warnings;
-use v5.10;
+use feature ':5.10';
 
 has number =>
   default       => sub { 23 };

@@ -1,6 +1,6 @@
 package Mite::Types;
 
-use v5.10;
+use feature ':5.10';
 use Mouse::Util::TypeConstraints;
 
 

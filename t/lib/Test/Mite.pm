@@ -1,7 +1,7 @@
 {
     package Test::Mite;
 
-    use v5.10;
+    use feature ':5.10';
     use strict;
     use warnings;
 
@@ -63,7 +63,7 @@
 {
     package Test::Mite::Functions;
 
-    use v5.10;
+    use feature ':5.10';
     use strict;
     use warnings;
 
@@ -91,8 +91,6 @@
 
     my $max_class_words = 5;
     make_rand class_name => func() {
-        state $used_classes = {};
-
         my $num_words = (int rand $max_class_words) + 1;
         return join "::", map { rand_class_word() } (1..$num_words);
     };

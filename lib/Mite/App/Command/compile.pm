@@ -1,6 +1,6 @@
 package Mite::App::Command::compile;
 
-use v5.10;
+use feature ':5.10';
 use Mouse;
 use MouseX::Foreign;
 extends qw(Mite::App::Command);

@@ -29,7 +29,7 @@ L<Mite::Class>, L<Mite::Compiled>, L<Mite::Project>
 
 =cut
 
-use v5.10;
+use feature ':5.10';
 use Mouse;
 use Mite::Types;
 

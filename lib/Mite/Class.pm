@@ -1,6 +1,6 @@
 package Mite::Class;
 
-use v5.10;
+use feature ':5.10';
 use Mouse;
 use Mouse::Util::TypeConstraints;
 use Method::Signatures;

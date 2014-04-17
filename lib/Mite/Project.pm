@@ -1,6 +1,6 @@
 package Mite::Project;
 
-use v5.10;
+use feature ':5.10';
 use Mouse;
 with qw(Mite::Role::HasConfig);
 
