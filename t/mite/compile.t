@@ -1,7 +1,8 @@
 #!/usr/bin/perl
 
 use lib 't/lib';
-use Test::Mite;
+use Test::Mite with_recommends => 1;
+
 use Path::Tiny;
 
 tests "compile" => sub {

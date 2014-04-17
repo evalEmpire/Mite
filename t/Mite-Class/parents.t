@@ -1,10 +1,7 @@
 #!/usr/bin/perl
 
-use strict;
-use warnings;
 use lib 't/lib';
-
-use Test::Mite;
+use Test::Mite with_recommends => 1;
 
 tests "parents as objects" => sub {
     my $child  = sim_class( name => "C1" );
