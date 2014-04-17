@@ -27,7 +27,10 @@
     method defaults($class: ...) {
         my %params = $class->SUPER::defaults;
 
-        push @{ $params{utils} }, "Test::Mite::Functions", "Test::Deep";
+        push @{ $params{utils} },
+          "Test::Mite::Functions",
+          "Test::Deep",
+          "Test::FailWarnings";
 
         return %params;
     }
