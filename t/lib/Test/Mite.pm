@@ -179,7 +179,7 @@
         my $child = Child->new(sub {
             require Mite::Project;
             my $project = Mite::Project->default;
-            $project->load_files($file);
+            $project->load_files([$file]);
             $project->write_mites;
         });
         my $process = $child->start;

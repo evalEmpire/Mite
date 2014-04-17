@@ -103,11 +103,13 @@ method write_mites() {
     return;
 }
 
-method load_files(Defined @files) {
+method load_files(ArrayRef $files, $inc_dir?) {
     local $ENV{MITE_COMPILE} = 1;
-    local @INC = (".", @INC);
-    for my $file (@files) {
-        require $file;
+    local @INC = @INC;
+    unshift @INC, $inc_dir if defined $inc_dir;
+    for my $file (@$files) {
+        my $pm_file = path($file)->relative($inc_dir);
+        require $pm_file;
     }
 
     return;
@@ -126,7 +128,7 @@ method find_pms($dir=$self->config->data->{source_from}) {
 }
 
 method load_directory($dir=$self->config->data->{source_from}) {
-    $self->load_files( $self->find_pms($dir) );
+    $self->load_files( [$self->find_pms($dir)], $dir );
 
     return;
 }
