@@ -111,101 +111,35 @@ L<Mouse>.
 
 =head2 How To Use It
 
-=head3 1. Install Mite::Compiler
+=head3 1. Install Mite
 
-Only developers must have Mite::Compiler installed.  Install it
-normally from CPAN.
+Only developers must have Mite installed.  Install it normally from
+CPAN.
 
-=head3 2a. Depend on Mite
+=head3 2. mite init <project-name>
 
-Add Mite into your runtime dependencies.  This is a very small module
-which loads the compiled Mite code.
+Initialize your project.  Tell it your project name.
 
-Or if you want no dependencies at all...
+=head3 3. Write your code using your mite shim.
 
-=head3 2b. Inject the Mite::Shim into your source code
+Instead of C<use Mite>, you should C<use Your::Project::Mite>.  The
+name of this file will depend on the name of your project.
 
-Run the C<mite_shim> program to generate the shim.  Tell it the name
-you want to give to the shim.  Put it into your lib directory.
-
-    mite_shim 'Foo::Mite' > lib/Foo/Mite.pm
-
-=head3 3. Run C<mite> when you change your code.
+=head3 4. C<mite compile> after each change
 
 Mite is "compiled" in that the code must be processed after editing
-before you run it.  This is done with the C<mite> program.
+before you run it.  This is done by running C<mite compile>.
 
-=head3 4. Make sure the mite files are in your MANIFEST
+=head3 5. Make sure the mite files are in your MANIFEST
 
-The compiled F<.mite.pm> files must ship with your code, so make
-sure they get picked up in your MANIFEST file.
+The compiled F<.mite.pm> files must ship with your code, so make sure
+they get picked up in your MANIFEST file.  This should happen by
+default.
 
-=head3 5. Ship normally
+=head3 6. Ship normally
 
 Build and ship your distribution normally.  It contains everything it
 needs.
-
-
-=head2 Exported Functions
-
-=head3 extends
-
-    extends @classes;
-
-Declares this is a subclass of C<@classes>.
-
-
-=head3 has
-
-    has $name => %args;
-
-Declares an object attribute named $name.
-
-See L<Attributes> for details.
-
-
-=head2 Provided Methods
-
-See L<Mite::Object> for full details of what a Mite class can do.
-Here are some of the basics.
-
-=head3 meta
-
-    my $meta = $obj->meta;
-    my $meta = Class->meta;
-
-Returns the meta object for the class.  Used for introspection.
-
-See L<Mite::Meta> for what you can do with the meta object.
-
-=head3 new
-
-    my $obj = Class->new( \%args );
-
-Constructs a new instance of the C<Class>.
-
-Arguments are passed in as a hash ref.
-
-C<new()> accepts attributes as its arguments.
-
-    my $obj = Foo->new(
-        attribute               => "Foo",
-        another_attribute       => 42
-    ); 
-
-=head3 override_attribute
-
-    Class->meta->override_attribute( name => \%args );
-
-Allows a subclass to change how an inherited attribute works.
-
-The C<%args> are the same as L<has>.
-
-    # Baz is a subclass of Foo
-    # Give Baz->attribute a default
-    Baz->override_attribute( attribute => {
-        default         => 'woof'
-    });
 
 
 =head1 WHY IS THIS
