@@ -7,11 +7,17 @@ use Path::Tiny;
 use autodie;
 
 tests "make" => sub {
+    my $libdir = path("lib")->absolute;
+
     chdir 't/MakeMaker/Some-Project';
 
     mite_command("init", "Some::Project");
 
-    system "$^X", "Makefile.PL";
+    {
+        local $ENV{PERL5LIB} = join ":", $libdir;
+        system "$^X", "Makefile.PL";
+    }
+
     system make();
 
     local @INC = ("lib", @INC);
