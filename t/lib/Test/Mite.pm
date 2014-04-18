@@ -73,6 +73,7 @@
         sim_source sim_class sim_project sim_attribute
         rand_class_name
         mite_command
+        make
     );
 
     use Test::Sims;
@@ -217,6 +218,16 @@
         }
 
         return;
+    }
+
+    func make() {
+        require Config;
+
+        my $make = $Config::Config{make};
+        $make = $ENV{MAKE} if exists $ENV{MAKE};
+        $make //= 'make';
+
+        return $make;
     }
 
     # We're loaded, really!
