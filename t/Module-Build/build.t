@@ -8,16 +8,16 @@ use autodie;
 
 tests "Build" => sub {
     my $libdir = path("lib")->absolute;
+    my $bindir = path("bin")->absolute;
+
+    local $ENV{PATH}     = join ':', grep { defined } $bindir, $ENV{PATH};
+    local $ENV{PERL5LIB} = join ':', grep { defined } $libdir, $ENV{PERL5LIB};
 
     chdir 't/Module-Build/Some-Project';
 
     mite_command("init", "Some::Project");
 
-    {
-        local $ENV{PERL5LIB} = join ":", $libdir;
-        system "$^X", "Build.PL";
-    }
-
+    system "$^X", "Build.PL";
     system './Build';
 
     local @INC = ("lib", @INC);
