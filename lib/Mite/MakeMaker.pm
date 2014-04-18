@@ -18,12 +18,16 @@ use feature ':5.10';
     }
 
     sub postamble {
-        return <<'MAKE';
+        my $mite = $ENV{MITE} || 'mite';
+
+        return <<"MAKE";
+MITE=$mite
+
 mite ::
-	mite compile
+	\$(MITE) compile
 
 clean ::
-	mite clean
+	\$(MITE) clean
 
 MAKE
     }

@@ -7,14 +7,18 @@ use Method::Signatures;
 
 use parent 'Module::Build';
 
+method _mite() {
+    return $ENV{MITE} || 'mite';
+}
+
 method ACTION_code() {
-    system "mite", "compile";
+    system $self->_mite. " compile";
 
     return $self->SUPER::ACTION_code;
 }
 
 method ACTION_clean() {
-    system "mite", "clean";
+    system $self->_mite. " clean";
 
     return $self->SUPER::ACTION_clean;
 }

@@ -10,7 +10,7 @@ tests "make" => sub {
     my $libdir = path("lib")->absolute;
     my $bindir = path("bin")->absolute;
 
-    local $ENV{PATH}     = join ':', grep { defined } $bindir, $ENV{PATH};
+    local $ENV{MITE} = "$^X $bindir/mite";
     local $ENV{PERL5LIB} = join ':', grep { defined } $libdir, $ENV{PERL5LIB};
 
     chdir 't/MakeMaker/Some-Project';
