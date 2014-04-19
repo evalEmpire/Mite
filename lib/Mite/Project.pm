@@ -2,7 +2,10 @@ package Mite::Project;
 
 use feature ':5.10';
 use Mouse;
-with qw(Mite::Role::HasConfig);
+with qw(
+    Mite::Role::HasConfig
+    Mite::Role::HasDefault
+);
 
 use Method::Signatures;
 use Path::Tiny;
@@ -48,18 +51,6 @@ method source_for($file) {
     );
 }
 
-# Get/set the default Mite project
-method default($class: $new_default?) {
-    return $class->projects("Default" => $new_default);
-}
-
-# Get/set the named project
-method projects($class: $name, $project?) {
-    state $projects = {};
-
-    return $project ? $projects->{$name} = $project
-                    : $projects->{$name} ||= $class->new;
-}
 
 # This is the shim Mite.pm uses when compiling.
 method inject_mite_functions(:$package, :$file) {
