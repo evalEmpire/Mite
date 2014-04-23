@@ -16,7 +16,7 @@ my $build = Module::Build->new(
         'Method::Signatures'    => '20140224',
         'Path::Tiny'            => '0.052',
         'App::Cmd'              => '0.323',
-        'MouseX::Foreign'       => '0.008',
+        'MouseX::Foreign'       => '1.000',
         'YAML::XS'              => '0.41',
     },
 
