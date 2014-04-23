@@ -2,11 +2,46 @@
 
 use lib 't/lib';
 use Test::Mite with_recommends => 1;
+use Test::Output;
 
+use autodie;
 use Path::Tiny;
 
+my $Orig_Cwd = Path::Tiny->cwd;
+
+tests "--exit-if-no-mite-dir" => sub {
+    my $dir = Path::Tiny->tempdir;
+    chdir $dir;
+
+    lives_ok { mite_command("compile", "--exit-if-no-mite-dir") };
+
+    chdir $Orig_Cwd;
+};
+
+tests "--no-search-mite-dir" => sub {
+    my $dir = Path::Tiny->tempdir;
+    chdir $dir;
+
+    # Make a .mite file above.
+    mite_command("init", "Foo");
+
+    # Go down a level
+    my $subdir = $dir->child("testing");
+    $subdir->mkpath;
+    chdir $subdir;
+
+    stderr_like {
+        ok !eval { mite_command("compile", "--no-search-mite-dir") };
+    } qr{No .mite directory found};
+
+    stderr_is {
+        mite_command("compile", "--no-search-mite-dir", "--exit-if-no-mite-dir");
+    } '';
+
+    chdir $Orig_Cwd;
+};
+
 tests "compile" => sub {
-    my $Orig_Cwd = Path::Tiny->cwd;
     my $dir = Path::Tiny->tempdir;
     chdir $dir;
 
