@@ -207,7 +207,7 @@
             die "Compiling returned exit code $child_exit";
         }
 
-        return;        
+        return $process;
     }
 
     func mite_command(@args) {
