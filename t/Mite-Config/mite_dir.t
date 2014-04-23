@@ -7,6 +7,8 @@ use autodie;
 
 use Mite::Config;
 
+my $Orig_Dir = Path::Tiny->cwd;
+
 tests "find_mite_dir with no .mite dir" => sub {
     my $dir = Path::Tiny->tempdir;
 
@@ -38,7 +40,24 @@ tests "find_mite_dir" => sub {
 
     is $config->find_mite_dir($dir),    $dir->child($config->mite_dir_name);
     is $config->find_mite_dir($subdir), $dir->child($config->mite_dir_name);
+
+    $config->search_for_mite_dir(0);
+    is $config->find_mite_dir($dir),    $dir->child($config->mite_dir_name);
+    ok !$config->find_mite_dir($subdir);
 };
 
+tests "no mite dir" => sub {
+    my $dir = Path::Tiny->tempdir;
+    chdir $dir;
+
+    my $config = new_ok "Mite::Config", [
+        search_for_mite_dir => 0
+    ];
+    throws_ok {
+        $config->mite_dir;
+    } qr{^No .mite directory found.$};
+
+    chdir $Orig_Dir;
+};
 
 done_testing;
