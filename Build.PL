@@ -28,6 +28,7 @@ my $build = Module::Build->new(
         'Test::Output'  => '1.02',
         'Test::FailWarnings' => '0.008',
         Fennec          => '2.016',
+        Child           => '0.010',     # fix for die in eval bug
     },
 
     recursive_test_files => 1,
