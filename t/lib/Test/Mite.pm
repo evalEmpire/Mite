@@ -74,6 +74,7 @@
         rand_class_name
         mite_command
         make
+        env_for_mite
     );
 
     use Test::Sims;
@@ -226,6 +227,16 @@
         $make //= 'make';
 
         return $make;
+    }
+
+    func env_for_mite() {
+        my $libdir = path("lib")->absolute;
+        my $bindir = path("bin")->absolute;
+
+        $ENV{MITE} = "$^X $bindir/mite";
+        $ENV{PERL5LIB} = join ':', grep { defined } $libdir, $ENV{PERL5LIB};
+
+        return;
     }
 
     # We're loaded, really!

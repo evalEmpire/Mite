@@ -7,11 +7,7 @@ use Path::Tiny;
 use autodie;
 
 tests "Build" => sub {
-    my $libdir = path("lib")->absolute;
-    my $bindir = path("bin")->absolute;
-
-    local $ENV{MITE} = "$^X $bindir/mite";
-    local $ENV{PERL5LIB} = join ':', grep { defined } $libdir, $ENV{PERL5LIB};
+    env_for_mite();
 
     chdir 't/Module-Build/Some-Project';
 
