@@ -29,6 +29,7 @@ my $build = Module::Build->new(
         'Test::FailWarnings' => '0.008',
         Fennec          => '2.016',
         Child           => '0.010',     # fix for die in eval bug
+        'File::Copy::Recursive' => '0.38',
     },
 
     recursive_test_files => 1,

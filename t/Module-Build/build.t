@@ -3,13 +3,19 @@
 use lib 't/lib';
 use Test::Mite;
 
+use File::Copy::Recursive qw(dircopy);
 use Path::Tiny;
 use autodie;
+
+my $Src_Project_Dir = 't/Module-Build/Some-Project';
+my $Original_Dir = Path::Tiny->cwd;
 
 tests "Build" => sub {
     env_for_mite();
 
-    chdir 't/Module-Build/Some-Project';
+    my $project_dir = Path::Tiny->tempdir;
+    dircopy( $Src_Project_Dir, $project_dir );
+    chdir $project_dir;
 
     mite_command("init", "Some::Project");
 
@@ -27,6 +33,8 @@ tests "Build" => sub {
     ok !-e 'lib/Some/Project.pm.mite.pm';
 
     path(".mite")->remove_tree;
+
+    chdir $Original_Dir;
 };
 
 done_testing;
