@@ -13,8 +13,10 @@ method abstract() {
     return "Remove compiled mite files";
 }
 
-method execute($opt, $args) {
-    require Mite::Project;
+method execute($opts, $args) {
+    return if $self->should_exit_quietly($opts); 
+
+   require Mite::Project;
     my $project = Mite::Project->default;
     $project->clean_mites;
     $project->clean_shim;

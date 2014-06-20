@@ -32,4 +32,14 @@ method should_exit_quietly($opts) {
 }
 
 
+method project() {
+    require Mite::Project;
+    return Mite::Project->default;
+}
+
+method config() {
+    return $self->project->config;
+}
+
+
 1;

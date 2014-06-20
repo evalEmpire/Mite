@@ -31,11 +31,11 @@ use feature ':5.10';
 MITE=%s
 
 mite ::
-	$(MITE) compile
+	$(MITE) compile --exit-if-no-mite-dir --no-search-mite-dir
 	$(ABSPERLRUN) -MMite::MakeMaker -e 'Mite::MakeMaker->fix_pm_to_blib(@ARGV);' lib $(INST_LIB)
 
 clean ::
-	$(MITE) clean
+	$(MITE) clean --exit-if-no-mite-dir --no-search-mite-dir
 
 MAKE
     }

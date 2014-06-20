@@ -19,20 +19,29 @@ tests "make" => sub {
 
     mite_command("init", "Some::Project");
 
-    system "$^X", "Makefile.PL";
-    system make();
+    is system("$^X", "Makefile.PL"), 0;
+    is system(make()), 0;
 
     local @INC = ("blib/lib", @INC);
     require Some::Project;
     my $obj = new_ok 'Some::Project';
     cmp_deeply $obj->something, [23, 42];
 
-    system make(), "clean";
+    is system(make(), "clean"), 0;
 
     ok !-e 'lib/Some/Project/Mite.pm';
     ok !-e 'lib/Some/Project.pm.mite.pm';
 
+    # Simulate a release, no .mite directory.
     path(".mite")->remove_tree;
+
+    is system("$^X", "Makefile.PL"), 0;
+    is system(make()), 0;
+
+    ok !-e 'lib/Some/Project/Mite.pm';
+    ok !-e 'lib/Some/Project.pm.mite.pm';
+
+    is system(make(), "clean"), 0;
 
     chdir $Original_Dir;
 };
