@@ -1,5 +1,11 @@
 package Mite::MakeMaker;
 
+use Mite::Types;
+use Method::Signatures;
+use Path::Tiny;
+use File::Find;
+use autodie;
+
 use strict;
 use warnings;
 use feature ':5.10';
@@ -7,8 +13,9 @@ use feature ':5.10';
 {
     package MY;
 
-    sub top_targets {
-        my $self = shift;
+    use Method::Signatures;
+
+    method top_targets() {
         my $make = $self->SUPER::top_targets;
 
         # Hacky way to run the mite target before pm_to_blib.
@@ -17,20 +24,52 @@ use feature ':5.10';
         return $make;
     }
 
-    sub postamble {
+    method postamble() {
         my $mite = $ENV{MITE} || 'mite';
 
-        return <<"MAKE";
-MITE=$mite
+        return sprintf <<'MAKE', $mite;
+MITE=%s
 
 mite ::
-	\$(MITE) compile
+	$(MITE) compile
+	$(ABSPERLRUN) -MMite::MakeMaker -e 'Mite::MakeMaker->fix_pm_to_blib(@ARGV);' lib $(INST_LIB)
 
 clean ::
-	\$(MITE) clean
+	$(MITE) clean
 
 MAKE
     }
+}
+
+
+method fix_pm_to_blib($from_dir, $to_dir) {
+    $from_dir = path($from_dir);
+    $to_dir   = path($to_dir);
+
+    find({
+        wanted => sub {
+            # Not just the mite files, but also the mite shim.
+            return if -d $_ || !m{\.pm$};
+
+            my $src = path($File::Find::name);
+            my $dst = change_parent_dir($from_dir, $to_dir, $src);
+
+            say "Copying $src to $dst";
+
+            $dst->parent->mkpath;
+            $src->copy($dst);
+
+            return;
+        },
+        no_chdir => 1
+    }, $from_dir);
+
+    return;
+}
+
+
+func change_parent_dir(Path $old_parent, Path $new_parent, Path $file) {
+    return $new_parent->child( $file->relative($old_parent) );
 }
 
 

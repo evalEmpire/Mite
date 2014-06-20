@@ -22,7 +22,7 @@ tests "Build" => sub {
     system "$^X", "Build.PL";
     system './Build';
 
-    local @INC = ("lib", @INC);
+    local @INC = ("blib/lib", @INC);
     require Some::Project;
     my $obj = new_ok 'Some::Project';
     cmp_deeply $obj->something, [23, 42];

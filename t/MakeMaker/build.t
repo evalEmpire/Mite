@@ -22,7 +22,7 @@ tests "make" => sub {
     system "$^X", "Makefile.PL";
     system make();
 
-    local @INC = ("lib", @INC);
+    local @INC = ("blib/lib", @INC);
     require Some::Project;
     my $obj = new_ok 'Some::Project';
     cmp_deeply $obj->something, [23, 42];
