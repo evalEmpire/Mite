@@ -13,15 +13,32 @@ method abstract() {
     return "Make your code ready to run";
 }
 
-method execute($opt, $args) {
-    require Mite::Project;
-    my $project = Mite::Project->default;
+
+method execute($opts, $args) {
+    return if $self->should_exit_quietly($opts);
+
+    my $config = Mite::Config->new(
+        search_for_mite_dir => $opts->{search_mite_dir}
+    );
+    my $project = Mite::Project->new(
+        config => $config
+    );
+    Mite::Project->set_default( $project );
 
     $project->add_mite_shim;
     $project->load_directory;
     $project->write_mites;
 
     return;
+}
+
+method project() {
+    require Mite::Project;
+    return Mite::Project->default;
+}
+
+method config() {
+    return $self->project->config;
 }
 
 1;

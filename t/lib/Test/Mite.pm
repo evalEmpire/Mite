@@ -74,6 +74,7 @@
         rand_class_name
         mite_command
         make
+        env_for_mite
     );
 
     use Test::Sims;
@@ -177,18 +178,12 @@
         # Compile the code
         # Do it in its own process to avoid polluting the test process
         # with compiler code.  This better emulates how it works in production.
-        my $child = Child->new(sub {
+        run_in_child(sub {
             require Mite::Project;
             my $project = Mite::Project->default;
             $project->load_files([$file]);
             $project->write_mites;
         });
-        my $process = $child->start;
-        $process->wait;
-
-        if( my $child_exit = $process->exit_status ) {
-            die "Compiling returned exit code $child_exit";
-        }
 
         return $file;
     }
@@ -202,13 +197,9 @@
         return $file;
     }
 
-    func mite_command(@args) {
+    func run_in_child(CodeRef $code) {
         # Avoid polluting the testing environment
-        my $child = Child->new(sub {
-            require Mite::App;
-            my $app = Mite::App->new;
-            $app->execute_command( $app->prepare_command(@args) );
-        });
+        my $child = Child->new($code);
 
         my $process = $child->start;
         $process->wait;
@@ -217,7 +208,15 @@
             die "Compiling returned exit code $child_exit";
         }
 
-        return;
+        return $process;
+    }
+
+    func mite_command(@args) {
+        return run_in_child(sub {
+            require Mite::App;
+            my $app = Mite::App->new;
+            $app->execute_command( $app->prepare_command(@args) );
+        });
     }
 
     func make() {
@@ -228,6 +227,16 @@
         $make //= 'make';
 
         return $make;
+    }
+
+    func env_for_mite() {
+        my $libdir = path("lib")->absolute;
+        my $bindir = path("bin")->absolute;
+
+        $ENV{MITE} = "$^X $bindir/mite";
+        $ENV{PERL5LIB} = join ':', grep { defined } $libdir, $ENV{PERL5LIB};
+
+        return;
     }
 
     # We're loaded, really!

@@ -22,7 +22,7 @@ has mite_dir =>
   lazy          => 1,
   default       => method {
       return $self->find_mite_dir ||
-        croak "No @{[$self->mite_dir_name]} directory found";
+        die "No @{[$self->mite_dir_name]} directory found.\n";
   };
 
 has config_file =>
@@ -42,6 +42,11 @@ has data =>
       return $self->yaml_load( $self->config_file->slurp_utf8 );
   };
 
+has search_for_mite_dir =>
+  is            => 'rw',
+  isa           => 'Bool',
+  default       => 1;
+
 method make_mite_dir($dir=Path::Tiny->cwd) {
     return path($dir)->child($self->mite_dir_name)->mkpath;
 }
@@ -51,17 +56,19 @@ method write_config(HashRef $data=$self->data) {
     return;
 }
 
-method find_mite_dir($current=Path::Tiny->cwd) {
-    my $mite_dir_name = $self->mite_dir_name;
+method dir_has_mite($dir) {
+    my $maybe_mite = path($dir)->child($self->mite_dir_name);
+    return $maybe_mite if -d $maybe_mite;
+    return;
+}
 
-    for(
-        ;
-        !$current->is_rootdir;
-        $current = $current->parent
-    ) {
-        my $maybe_mite = $current->child($mite_dir_name);
-        return $maybe_mite if -d $maybe_mite;
-    }
+method find_mite_dir($current=Path::Tiny->cwd) {
+    do {
+        my $maybe_mite = $self->dir_has_mite($current);
+        return $maybe_mite if $maybe_mite;
+
+        $current = $current->parent;
+    } while $self->search_for_mite_dir && !$current->is_rootdir;
 
     return;
 }

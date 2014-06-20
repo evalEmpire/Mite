@@ -16,7 +16,7 @@ my $build = Module::Build->new(
         'Method::Signatures'    => '20140224',
         'Path::Tiny'            => '0.052',
         'App::Cmd'              => '0.323',
-        'MouseX::Foreign'       => '0.008',
+        'MouseX::Foreign'       => '1.000',
         'YAML::XS'              => '0.41',
     },
 
@@ -28,6 +28,8 @@ my $build = Module::Build->new(
         'Test::Output'  => '1.02',
         'Test::FailWarnings' => '0.008',
         Fennec          => '2.016',
+        Child           => '0.010',     # fix for die in eval bug
+        'File::Copy::Recursive' => '0.38',
     },
 
     recursive_test_files => 1,
