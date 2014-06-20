@@ -6,7 +6,7 @@ use Test::Mite;
 use Path::Tiny;
 use autodie;
 
-use Mite::Makemaker;
+use Mite::MakeMaker;
 
 my $Orig_Dir = Path::Tiny->cwd;
 
