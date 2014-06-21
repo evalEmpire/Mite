@@ -8,18 +8,21 @@ tests "single inheritance and defaults" => sub {
 package GP1;
 use Mite::Shim;
 has foo =>
+    is      => 'rw',
     default => 23;
 
 package P1;
 use Mite::Shim;
 extends 'GP1';
 has foo =>
+    is      => 'rw',
     default => 42;
 
 package C1;
 use Mite::Shim;
 extends 'P1';
-has "bar";
+has "bar" =>
+    is      => 'rw';
 
 1;
 CODE
@@ -40,24 +43,28 @@ tests "multiple inheritance and defaults" => sub {
 package GP1;
 use Mite::Shim;
 has foo =>
+    is      => 'rw',
     default => "gp1 foo default";
 
 package P1;
 use Mite::Shim;
 extends 'GP1';
 has bar =>
+    is      => 'rw',
     default => "p1 bar default";
 
 package P2;
 use Mite::Shim;
 extends 'GP1';
 has foo =>
+    is      => 'rw',
     default => "p2 foo default";
 
 package C1;
 use Mite::Shim;
 extends 'P1', 'P2';
-has "bar";
+has bar =>
+    is      => 'rw';
 
 1;
 CODE

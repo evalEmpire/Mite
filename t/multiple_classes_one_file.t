@@ -8,12 +8,14 @@ tests "Many classes, one file" => sub {
 package Foo;
 use Mite::Shim;
 has 'things' =>
+    is      => 'rw',
     default => 42;
 
 package Bar;
 use Mite::Shim;
 extends 'Foo';
 has 'stuff' =>
+    is      => 'rw',
     default => 23;
 1;
 CODE

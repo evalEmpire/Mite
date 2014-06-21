@@ -14,16 +14,20 @@ use warnings;
 use feature ':5.10';
 
 has number =>
+  is            => 'rw',
   default       => sub { 23 };
 
 has list =>
+  is            => 'rw',
   default       => sub { [] };
 
 my $thing = { foo => 99 };
 has closure =>
+  is            => 'rw',
   default       => sub { $thing };
 
 has counter =>
+  is            => 'rw',
   default       => sub {
       state $counter = 0;
       $counter++;

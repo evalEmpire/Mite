@@ -20,7 +20,7 @@ has coderef_default_variable =>
 has is =>
   is            => 'rw',
   isa           => 'Str',
-  default       => 'rw';
+  default       => '';
 
 has name =>
   is            => 'rw',
@@ -65,9 +65,16 @@ method has_simple_default() {
     return !ref $self->default;
 }
 
+method _empty() { return ';' }
+
 method compile() {
-    my $perl_method = $self->is eq 'rw' ? '_compile_rw_perl' : '_compile_ro_perl';
-    my $xs_method   = $self->is eq 'rw' ? '_compile_rw_xs'   : '_compile_ro_xs';
+    my $perl_method = $self->is eq 'rw' ? '_compile_rw_perl'    :
+                      $self->is eq 'ro' ? '_compile_ro_perl'    :
+                                          '_empty'              ;
+
+    my $xs_method   = $self->is eq 'rw' ? '_compile_rw_xs'      :
+                      $self->is eq 'ro' ? '_compile_ro_xs'      :
+                                          '_empty'              ;
 
     return sprintf <<'CODE', $self->$xs_method, $self->$perl_method;
 if( !$ENV{MITE_PURE_PERL} && eval { require Class::XSAccessor } ) {
