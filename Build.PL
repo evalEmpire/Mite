@@ -31,6 +31,7 @@ my $build = Module::Build->new(
         Child           => '0.010',     # fix for die in eval bug
         'File::Copy::Recursive' => '0.38',
         'Capture::Tiny' => '0.22',
+        'Devel::Hide'   => '0.0009',
     },
 
     recursive_test_files => 1,
