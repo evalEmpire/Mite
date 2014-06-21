@@ -32,13 +32,4 @@ method execute($opts, $args) {
     return;
 }
 
-method project() {
-    require Mite::Project;
-    return Mite::Project->default;
-}
-
-method config() {
-    return $self->project->config;
-}
-
 1;
