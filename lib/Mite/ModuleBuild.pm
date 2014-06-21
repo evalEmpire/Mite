@@ -12,13 +12,13 @@ method _mite() {
 }
 
 method ACTION_code() {
-    system $self->_mite. " compile";
+    system $self->_mite. " compile --exit-if-no-mite-dir --no-search-mite-dir";
 
     return $self->SUPER::ACTION_code;
 }
 
 method ACTION_clean() {
-    system $self->_mite. " clean";
+    system $self->_mite. " clean --exit-if-no-mite-dir --no-search-mite-dir";
 
     return $self->SUPER::ACTION_clean;
 }

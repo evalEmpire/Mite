@@ -19,20 +19,29 @@ tests "Build" => sub {
 
     mite_command("init", "Some::Project");
 
-    system "$^X", "Build.PL";
-    system './Build';
+    is system("$^X", "Build.PL"), 0;
+    is system('./Build'), 0;
 
     local @INC = ("blib/lib", @INC);
     require Some::Project;
     my $obj = new_ok 'Some::Project';
     cmp_deeply $obj->something, [23, 42];
 
-    system './Build', "clean";
+    is system('./Build', "clean"), 0;
 
     ok !-e 'lib/Some/Project/Mite.pm';
     ok !-e 'lib/Some/Project.pm.mite.pm';
 
+    # Simulate a release, no .mite directory.
     path(".mite")->remove_tree;
+
+    is system("$^X", "Build.PL"), 0;
+    is system('./Build'), 0;
+
+    ok !-e 'lib/Some/Project/Mite.pm';
+    ok !-e 'lib/Some/Project.pm.mite.pm';
+
+    is system('./Build', "clean"), 0;
 
     chdir $Original_Dir;
 };
