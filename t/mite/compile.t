@@ -52,8 +52,11 @@ tests "compile" => sub {
 package Foo;
 use Foo::Mite;
 
-has "foo";
-has "bar";
+has "foo" =>
+  is    => 'rw';
+
+has "bar" =>
+  is    => 'rw';
 
 1;
 CODE
@@ -64,7 +67,8 @@ use Foo::Mite;
 extends 'Foo';
 
 has "baz" =>
-    default => sub { 42 };
+    is          => 'rw',
+    default     => sub { 42 };
 
 1;
 CODE

@@ -10,6 +10,7 @@ package Foo;
 use Mite::Shim;
 
 has things =>
+    is      => 'rw',
     default => 23;
 
 1;

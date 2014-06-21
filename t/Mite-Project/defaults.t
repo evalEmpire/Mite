@@ -9,6 +9,7 @@ package Foo;
 use Mite::Shim;
 
 has foo =>
+    is      => 'rw',
     default => undef;
 
 1;

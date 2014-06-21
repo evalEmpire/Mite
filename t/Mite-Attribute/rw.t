@@ -15,10 +15,12 @@ after_case "Create a class to test with" => sub {
 
     eval Mite::Attribute->new(
         name    => 'name',
+        is      => 'rw',
     )->compile; die $@ if $@;
 
     eval Mite::Attribute->new(
         name    => 'job',
+        is      => 'rw',
     )->compile; die $@ if $@;
 };
 

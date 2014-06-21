@@ -19,7 +19,8 @@ tests "clean" => sub {
 package Foo;
 use Foo::Mite;
 
-has "something";
+has "something" =>
+  is    => 'rw';
 
 1;
 CODE
