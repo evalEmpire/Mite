@@ -3,6 +3,7 @@
 use lib 't/lib';
 use Test::Mite;
 
+use Capture::Tiny qw(capture_stderr);
 use File::Copy::Recursive qw(dircopy);
 use Path::Tiny;
 use autodie;
@@ -42,6 +43,31 @@ tests "make" => sub {
     ok !-e 'lib/Some/Project.pm.mite.pm';
 
     is system(make(), "clean"), 0;
+
+    chdir $Original_Dir;
+};
+
+tests "make without mite" => sub {
+    local $ENV{DEVEL_HIDE_VERBOSE} = 0;
+    local $ENV{PERL5OPT} = '-MDevel::Hide=Mite::App';
+
+    env_for_mite();
+
+    my $project_dir = Path::Tiny->tempdir;
+    dircopy( $Src_Project_Dir, $project_dir );
+    chdir $project_dir;
+
+    is system("$^X", "Makefile.PL"), 0;
+    capture_stderr {
+        is system(make()), 0;
+    };
+
+    ok !-e 'lib/Some/Project/Mite.pm';
+    ok !-e 'lib/Some/Project.pm.mite.pm';
+
+    capture_stderr {
+        is system(make(), "clean"), 0;
+    };
 
     chdir $Original_Dir;
 };
