@@ -93,6 +93,35 @@ Build and ship your distribution normally.  It contains everything it
 needs.
 
 
+=head1 FEATURES
+
+L<Mite> is a subset of L<Moose>.  These docs will only describe what
+Moose features are implemented or where they differ.  For everything
+else, please read L<Moose> and L<Moose::Manual>.
+
+=head2 C<has>
+
+Supports C<is> and C<default>.
+
+As an extension, C<default> supports data references.  There is no
+need to wrap them in a code reference.
+
+    has some_list =>
+        is      => 'rw',
+        default => [];
+
+=head2 C<extends>
+
+Works as in L<Moose>.  Options are not implemented.
+
+=head2 C<strict>
+
+Mite will turn strict on for you.
+
+=head2 C<warnings>
+
+Mite will turn warnings on for you.
+
 =head1 WHY IS THIS
 
 This module exists for a very "special" set of use cases.  Authors of
