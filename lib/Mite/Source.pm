@@ -11,6 +11,8 @@ Mite::Source - Representing the human written .pm file.
 
 =head1 DESCRIPTION
 
+NO USER SERVICABLE PARTS INSIDE.  This is a private class.
+
 Represents a .pm file, written by a human, which uses Mite.
 
 It is responsible for information about the source file.

@@ -103,6 +103,20 @@ When C<make> is run, mite will compile any changes.
 
 When C<make clean> is run, mite files will be cleaned up as well.
 
+=head3 C<make manifest>
+
+Be sure to run this after running C<make> and before running C<make
+dist> so all the mite files are picked up.
+
+=head3 F<MANIFEST.SKIP>
+
+The F<.mite> directory should not be shipped with your distribution.
+Add C<^\.mite$> to your F<MANIFEST.SKIP> file.
+
+=head1 SEE ALSO
+
+L<Mite::ModuleBuild>
+
 =cut
 
 1;

@@ -11,6 +11,8 @@ Mite::Compiled - The extra class file written by Mite.
 
 =head1 DESCRIPTION
 
+NO USER SERVICABLE PARTS INSIDE.  This is a private class.
+
 Represents the extra file written by Mite containing the compiled code.
 
 There is a one-to-one mapping between a source file and a compiled

@@ -45,7 +45,8 @@ If your module is being developed with L<Module::Build>, this
 module makes working with L<Mite> more natural.
 
 Be sure to C<require> this in an C<eval> block so users can install
-your module without mite.
+your module without mite.  C<require> will return the name of the
+class.
 
 =head3 C<./Build>
 
@@ -54,6 +55,16 @@ When C<./Build> is run, mite will compile any changes.
 =head3 C<./Build clean>
 
 When C<./Build clean> is run, mite files will be cleaned up as well.
+
+=head3 C<./Build manifest>
+
+Be sure to run this after running C<./Build> and before running
+C<./Build dist> so all the mite files are picked up.
+
+=head3 F<MANIFEST.SKIP>
+
+The F<.mite> directory should not be shipped with your distribution.
+Add C<^\.mite$> to your F<MANIFEST.SKIP> file.
 
 =cut
 
