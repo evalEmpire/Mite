@@ -4,7 +4,7 @@ use version; our $VERSION = qv("v0.0.1");
 
 =head1 NAME
 
-Mite - Moose-like OO with no dependencies
+Mite - Moose-like OO, fast to load, with no dependencies
 
 =head1 SYNOPSIS
 
@@ -125,9 +125,27 @@ Mite will turn strict on for you.
 
 Mite will turn warnings on for you.
 
+
+=head1 OPTIMIZATIONS
+
+Mite writes pure Perl code and your module will run with no
+dependencies.  It will also write code to use other, faster modules to
+do the same job, if available.
+
+These optimizations can be turned off by setting the C<MITE_PURE_PERL>
+environment variable true.
+
+You may wish to add these as recommended dependencies.
+
+=head2 Class::XSAccessor
+
+Mite will use L<Class::XSAccessor> for accessors if available.  They
+are significantly faster.
+
+
 =head1 WHY IS THIS
 
-This module exists for a very "special" set of use cases.  Authors of
+This module exists for a very special set of use cases.  Authors of
 toolchain modules (Test::More, ExtUtils::MakeMaker, File::Spec,
 etc...) who cannot easily depend on other CPAN modules.  It would
 cause a circular dependency and add instability to CPAN.  These
@@ -139,15 +157,13 @@ modules limit how fast modules can load.  So they have to compile very
 fast.  They do not have the luxury of creating attributes and
 including roles at compile time.  It must be baked in.
 
-Finally, Moose and Mouse both require role users and subclassers to
-also be Moose or Mouse classes.  This is a dangerous encapsulation
-breach of an implementation detail.  It means the class, and its
-subclasses, are stuck using Moose or Mouse forever.
-
+Use Mite if your project cannot have non-core dependencies or needs to
+load very quickly.
 
 =head1 SEE ALSO
 
-L<Mouse> is a forward-compatible version of Moose with no dependencies.
+L<Mouse> is a very fast and rather complete subset of Moose with no
+dependencies.
 
 L<Moose> is the complete Perl 5 OO module which this is all based on.
 
