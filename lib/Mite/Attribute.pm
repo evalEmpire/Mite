@@ -1,5 +1,6 @@
 package Mite::Attribute;
 
+use Carp;
 use Mouse;
 use Method::Signatures;
 
@@ -19,8 +20,13 @@ has coderef_default_variable =>
 
 has is =>
   is            => 'rw',
-  isa           => 'Str',
-  default       => '';
+  default       => '',
+  trigger       => method($new, $old?) {
+      croak
+        "I do not understand this option (is => $new) on attribute (@{[$self->name]})"
+        unless $new =~ /^(ro|rw|)$/;
+      return;
+  };
 
 has name =>
   is            => 'rw',
