@@ -52,6 +52,9 @@ L<Mouse>.
 Only developers must have Mite installed.  Install it normally from
 CPAN.
 
+Do not declare Mite as a dependency.  It is not needed to install your
+release.
+
 =head3 2. mite init <Your::Project>
 
 Initialize your project.  Tell it your project name.
