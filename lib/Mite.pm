@@ -4,7 +4,7 @@ use version; our $VERSION = qv("v0.0.1");
 
 =head1 NAME
 
-Mite - Moose-like OO, fast to load, with no dependencies
+Mite - Moose-like OO, fast to load, with zero dependencies.
 
 =head1 SYNOPSIS
 
@@ -32,17 +32,19 @@ Mite - Moose-like OO, fast to load, with no dependencies
 
 =head1 DESCRIPTION
 
+Mite provides a subset of Moose features with very fast startup time
+and zero dependencies.
+
 L<Moose> and L<Mouse> are great... unless you can't have any
 dependencies or compile-time is critical.
 
-Mite provides Moose-like functionality, but it does all the work at
-build time.  New source code is written which contains your accessors
-and roles.
-
-Mite provides a subset of Moose features.
+Mite provides Moose-like functionality, but it does all the work
+during development.  New source code is written which contains the OO
+code.  Your project does not have to depend on Mite.  Nor does your
+project have to spend time during startup to build OO features.
 
 Mite is for a very narrow set of use cases.  Unless you specifically
-need ultra-fast startup time or no dependencies, use L<Moose> or
+need ultra-fast startup time or zero dependencies, use L<Moose> or
 L<Mouse>.
 
 =head2 How To Use It
@@ -140,8 +142,7 @@ You may wish to add these as recommended dependencies.
 =head2 Class::XSAccessor
 
 Mite will use L<Class::XSAccessor> for accessors if available.  They
-are significantly faster.
-
+are significantly faster than those written in Perl.
 
 =head1 WHY IS THIS
 
