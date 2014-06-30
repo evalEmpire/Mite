@@ -108,13 +108,6 @@ else, please read L<Moose> and L<Moose::Manual>.
 
 Supports C<is> and C<default>.
 
-As an extension, C<default> supports data references.  There is no
-need to wrap them in a code reference.
-
-    has some_list =>
-        is      => 'rw',
-        default => [];
-
 =head2 C<extends>
 
 Works as in L<Moose>.  Options are not implemented.
