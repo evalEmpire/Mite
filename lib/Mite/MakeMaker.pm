@@ -111,7 +111,7 @@ dist> so all the mite files are picked up.
 =head3 F<MANIFEST.SKIP>
 
 The F<.mite> directory should not be shipped with your distribution.
-Add C<^\.mite$> to your F<MANIFEST.SKIP> file.
+Add C<^\.mite/> to your F<MANIFEST.SKIP> file.
 
 =head1 SEE ALSO
 
