@@ -1,5 +1,5 @@
 {
-   "abstract" : "What you need to develop with Mite",
+   "abstract" : "Moose-like OO, fast to load, with zero dependencies.",
    "author" : [],
    "dynamic_config" : 1,
    "generated_by" : "Module::Build version 0.4205",
@@ -10,14 +10,20 @@
       "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
       "version" : "2"
    },
-   "name" : "Mite-Compiler",
+   "name" : "Mite",
    "prereqs" : {
       "build" : {
          "requires" : {
+            "Capture::Tiny" : "0.22",
+            "Child" : "0.010",
+            "Devel::Hide" : "0.0009",
             "Fennec" : "2.016",
+            "File::Copy::Recursive" : "0.38",
             "Test::Compile" : "0.24",
             "Test::Deep" : "0.110",
+            "Test::FailWarnings" : "0.008",
             "Test::Most" : "0.31",
+            "Test::Output" : "1.02",
             "Test::Sims" : "20130412"
          }
       },
@@ -28,16 +34,37 @@
       },
       "runtime" : {
          "requires" : {
+            "App::Cmd" : "0.323",
             "Method::Signatures" : "20140224",
-            "Mite" : "v0.0.1",
             "Mouse" : "1.08",
+            "MouseX::Foreign" : "1.000",
             "Path::Tiny" : "0.052",
+            "YAML::XS" : "0.41",
             "perl" : "v5.10.1",
             "version" : "0.77"
          }
       }
    },
    "provides" : {
+      "Mite" : {
+         "file" : "lib/Mite.pm",
+         "version" : "v0.0.1"
+      },
+      "Mite::App" : {
+         "file" : "lib/Mite/App.pm"
+      },
+      "Mite::App::Command" : {
+         "file" : "lib/Mite/App/Command.pm"
+      },
+      "Mite::App::Command::clean" : {
+         "file" : "lib/Mite/App/Command/clean.pm"
+      },
+      "Mite::App::Command::compile" : {
+         "file" : "lib/Mite/App/Command/compile.pm"
+      },
+      "Mite::App::Command::init" : {
+         "file" : "lib/Mite/App/Command/init.pm"
+      },
       "Mite::Attribute" : {
          "file" : "lib/Mite/Attribute.pm"
       },
@@ -47,15 +74,27 @@
       "Mite::Compiled" : {
          "file" : "lib/Mite/Compiled.pm"
       },
-      "Mite::Compiler" : {
-         "file" : "lib/Mite/Compiler.pm",
-         "version" : "v0.0.1"
+      "Mite::Config" : {
+         "file" : "lib/Mite/Config.pm"
       },
       "Mite::Project" : {
          "file" : "lib/Mite/Project.pm"
       },
+      "Mite::Role::HasConfig" : {
+         "file" : "lib/Mite/Role/HasConfig.pm"
+      },
+      "Mite::Role::HasYAML" : {
+         "file" : "lib/Mite/Role/HasYAML.pm"
+      },
+      "Mite::Shim" : {
+         "file" : "lib/Mite/Shim.pm",
+         "version" : "v0.0.1"
+      },
       "Mite::Source" : {
          "file" : "lib/Mite/Source.pm"
+      },
+      "Mite::Types" : {
+         "file" : "lib/Mite/Types.pm"
       }
    },
    "release_status" : "stable",
