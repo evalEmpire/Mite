@@ -47,6 +47,9 @@ my $build = Module::Build->new(
             bugtracker => 'https://github.com/evalEmpire/Mite/issues',
             repository => 'https://github.com/evalEmpire/Mite',
         },
+        no_index => {
+            package => [qw(MY)],
+        },
     }
 );
 $build->create_build_script;

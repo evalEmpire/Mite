@@ -11,6 +11,11 @@
       "version" : "2"
    },
    "name" : "Mite",
+   "no_index" : {
+      "package" : [
+         "MY"
+      ]
+   },
    "prereqs" : {
       "build" : {
          "requires" : {
@@ -46,6 +51,9 @@
       }
    },
    "provides" : {
+      "MY" : {
+         "file" : "lib/Mite/MakeMaker.pm"
+      },
       "Mite" : {
          "file" : "lib/Mite.pm",
          "version" : "v0.0.1"
@@ -77,11 +85,20 @@
       "Mite::Config" : {
          "file" : "lib/Mite/Config.pm"
       },
+      "Mite::MakeMaker" : {
+         "file" : "lib/Mite/MakeMaker.pm"
+      },
+      "Mite::ModuleBuild" : {
+         "file" : "lib/Mite/ModuleBuild.pm"
+      },
       "Mite::Project" : {
          "file" : "lib/Mite/Project.pm"
       },
       "Mite::Role::HasConfig" : {
          "file" : "lib/Mite/Role/HasConfig.pm"
+      },
+      "Mite::Role::HasDefault" : {
+         "file" : "lib/Mite/Role/HasDefault.pm"
       },
       "Mite::Role::HasYAML" : {
          "file" : "lib/Mite/Role/HasYAML.pm"

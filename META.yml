@@ -23,7 +23,12 @@ meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
   version: '1.4'
 name: Mite
+no_index:
+  package:
+    - MY
 provides:
+  MY:
+    file: lib/Mite/MakeMaker.pm
   Mite:
     file: lib/Mite.pm
     version: v0.0.1
@@ -45,10 +50,16 @@ provides:
     file: lib/Mite/Compiled.pm
   Mite::Config:
     file: lib/Mite/Config.pm
+  Mite::MakeMaker:
+    file: lib/Mite/MakeMaker.pm
+  Mite::ModuleBuild:
+    file: lib/Mite/ModuleBuild.pm
   Mite::Project:
     file: lib/Mite/Project.pm
   Mite::Role::HasConfig:
     file: lib/Mite/Role/HasConfig.pm
+  Mite::Role::HasDefault:
+    file: lib/Mite/Role/HasDefault.pm
   Mite::Role::HasYAML:
     file: lib/Mite/Role/HasYAML.pm
   Mite::Shim:
