@@ -9,6 +9,10 @@ my $build = Module::Build->new(
     module_name => 'Mite',
     license  => 'perl',
 
+    configure_requires => {
+        'Module::Build' => 0.42
+    },
+
     requires => {
         'perl'                  => '5.10.1',
         version                 => '0.77',
