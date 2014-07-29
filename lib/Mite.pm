@@ -35,6 +35,11 @@ Mite - Moose-like OO, fast to load, with zero dependencies.
 Mite provides a subset of Moose features with very fast startup time
 and zero dependencies.
 
+This release is a proof-of-concept.  It is to gather information about
+the basic premise of a pre-compiled Moose variant and gauge interest.
+It is missing a lot of features, they'll be added later if Mite proves
+to be a good idea.  What it does have is well tested.
+
 L<Moose> and L<Mouse> are great... unless you can't have any
 dependencies or compile-time is critical.
 
