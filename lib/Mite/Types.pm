@@ -35,6 +35,15 @@ coerce 'AbsPath' =>
       return Path::Tiny->new($_)->absolute;
   };
 
+duck_type 'TypeConstraint', [ 'inline_check' ];
+
+coerce 'TypeConstraint' =>
+  from 'Str',
+  via {
+      require Type::Utils;
+      Type::Utils::dwim_type($_);
+  };
+
 no Mouse::Util::TypeConstraints;
 
 1;

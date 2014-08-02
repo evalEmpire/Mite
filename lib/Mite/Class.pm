@@ -136,7 +136,7 @@ Sorry.
 ERROR
 }
 
-method add_attributes(Mite::Attribute @attributes) {
+method add_attributes(Object @attributes) {
     for my $attribute (@attributes) {
         $self->attributes->{ $attribute->name } = $attribute;
     }
@@ -215,10 +215,12 @@ method _compile_bless() {
 }
 
 method _compile_new() {
-    return sprintf <<'CODE', $self->_compile_bless, $self->_compile_defaults;
+    return sprintf <<'CODE', $self->_compile_type_checks, $self->_compile_bless, $self->_compile_defaults;
 sub new {
     my $class = shift;
     my %%args  = @_;
+
+    %s
 
     my $self = %s;
 
@@ -268,6 +270,32 @@ method _attributes_with_coderef_defaults() {
 
 method _attributes_with_dataref_defaults() {
     return grep { $_->has_dataref_default } values %{$self->all_attributes};
+}
+
+method _compile_type_check ($attr) {
+    my $name    = $attr->name;
+    my $var     = sprintf '$args{q[%s]}', $name;
+    my $inlined = $attr->isa->inline_check($var);
+    return sprintf(
+        q/%s or die sprintf "Type check failed for attribute '%%s'", q[%s];/,
+        $inlined, $name,
+    );
+}
+
+method _compile_type_checks {
+    my @type_checks = map { $self->_compile_type_check($_) }
+                          $self->_attributes_with_type_checks;
+
+    return join "\n", @type_checks;
+}
+
+method _attributes_with_type_checks() {
+    # sort attributes to make any exception thrown less dependent
+    # on hash order
+    return
+        sort { $a->{name} cmp $b->{name} }
+        grep { $_->has_isa }
+        values %{$self->all_attributes};
 }
 
 method _compile_attributes() {
