@@ -275,7 +275,7 @@ method _attributes_with_dataref_defaults() {
 method _compile_type_check ($attr) {
     my $name    = $attr->name;
     my $var     = sprintf '$args{q[%s]}', $name;
-    my $inlined = $attr->isa->inline_check($var);
+    my $inlined = $attr->type_constraint->inline_check($var);
     return sprintf(
         q/%s or die sprintf "Type check failed for attribute '%%s'", q[%s];/,
         $inlined, $name,
@@ -294,7 +294,7 @@ method _attributes_with_type_checks() {
     # on hash order
     return
         sort { $a->{name} cmp $b->{name} }
-        grep { $_->has_isa }
+        grep { $_->has_type_constraint }
         values %{$self->all_attributes};
 }
 

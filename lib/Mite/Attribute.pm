@@ -10,10 +10,11 @@ has default =>
   isa           => 'Maybe[Str|Ref]',
   predicate     => 'has_default';
 
-has isa =>
+has type_constraint =>
+  init_arg      => 'isa',
   is            => 'rw',
   isa           => 'TypeConstraint',
-  predicate     => 'has_isa',
+  predicate     => 'has_type_constraint',
   coerce        => 1;
 
 has coderef_default_variable =>
@@ -89,7 +90,7 @@ method compile() {
                       $self->is eq 'ro' ? '_compile_ro_xs'      :
                                           '_empty'              ;
 
-    undef $xs_method if $self->has_isa and $self->is eq 'rw';
+    undef $xs_method if $self->has_type_constraint and $self->is eq 'rw';
 
     return $self->$perl_method if !defined $xs_method;
 
@@ -117,7 +118,7 @@ CODE
 method _compile_rw_perl() {
     my $name = $self->name;
 
-    return $self->_compile_rw_perl_typed() if $self->has_isa;
+    return $self->_compile_rw_perl_typed() if $self->has_type_constraint;
 
     return sprintf <<'CODE', $name, $name, $name;
 *%s = sub {
@@ -133,7 +134,7 @@ CODE
 method _compile_rw_perl_typed() {
     my $name = $self->name;
 
-    my $inlined = $self->isa->inline_check('$_[1]');
+    my $inlined = $self->type_constraint->inline_check('$_[1]');
 
     return sprintf <<'CODE', $name, $inlined, $name, $name, $name;
 *%s = sub {
