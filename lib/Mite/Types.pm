@@ -35,6 +35,21 @@ coerce 'AbsPath' =>
       return Path::Tiny->new($_)->absolute;
   };
 
+duck_type 'TypeConstraint', [ 'inline_check' ];
+
+my $reg;
+coerce 'TypeConstraint' =>
+  from 'Str',
+  via {
+      $reg ||= do {
+          require Type::Registry;
+          $reg = Type::Registry->new;
+          $reg->add_types( -Standard );
+          $reg;
+      };
+      $reg->lookup($_);
+  };
+
 no Mouse::Util::TypeConstraints;
 
 1;

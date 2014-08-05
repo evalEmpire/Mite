@@ -3,11 +3,19 @@ package Mite::Attribute;
 use Carp;
 use Mouse;
 use Method::Signatures;
+use Mite::Types;
 
 has default =>
   is            => 'rw',
   isa           => 'Maybe[Str|Ref]',
   predicate     => 'has_default';
+
+has type_constraint =>
+  init_arg      => 'isa',
+  is            => 'rw',
+  isa           => 'TypeConstraint',
+  predicate     => 'has_type_constraint',
+  coerce        => 1;
 
 has coderef_default_variable =>
   is            => 'rw',
@@ -82,6 +90,10 @@ method compile() {
                       $self->is eq 'ro' ? '_compile_ro_xs'      :
                                           '_empty'              ;
 
+    undef $xs_method if $self->has_type_constraint and $self->is eq 'rw';
+
+    return $self->$perl_method if !defined $xs_method;
+
     return sprintf <<'CODE', $self->$xs_method, $self->$perl_method;
 if( !$ENV{MITE_PURE_PERL} && eval { require Class::XSAccessor } ) {
 %s
@@ -106,6 +118,8 @@ CODE
 method _compile_rw_perl() {
     my $name = $self->name;
 
+    return $self->_compile_rw_perl_typed() if $self->has_type_constraint;
+
     return sprintf <<'CODE', $name, $name, $name;
 *%s = sub {
     # This is hand optimized.  Yes, even adding
@@ -115,6 +129,23 @@ method _compile_rw_perl() {
 }
 CODE
 
+}
+
+method _compile_rw_perl_typed() {
+    my $name = $self->name;
+
+    my $inlined = $self->type_constraint->inline_check('$_[1]');
+
+    return sprintf <<'CODE', $name, $inlined, $name, $name, $name;
+*%s = sub {
+    # This is hand optimized.  Yes, even adding
+    # return will slow it down.
+    @_ > 1
+        ? (%s or die sprintf "Type check failed for attribute '%%s'", q[%s])
+            && ($_[0]->{ q[%s] } = $_[1])
+        : $_[0]->{ q[%s] };
+};
+CODE
 }
 
 method _compile_ro_xs() {

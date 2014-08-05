@@ -22,6 +22,7 @@ my $build = Module::Build->new(
         'App::Cmd'              => '0.323',
         'MouseX::Foreign'       => '1.000',
         'YAML::XS'              => '0.41',
+        'Type::Utils'           => '0.046',
     },
 
     build_requires => {
