@@ -37,11 +37,17 @@ coerce 'AbsPath' =>
 
 duck_type 'TypeConstraint', [ 'inline_check' ];
 
+my $reg;
 coerce 'TypeConstraint' =>
   from 'Str',
   via {
-      require Type::Utils;
-      Type::Utils::dwim_type($_);
+      $reg ||= do {
+          require Type::Registry;
+          $reg = Type::Registry->new;
+          $reg->add_types( -Standard );
+          $reg;
+      };
+      $reg->lookup($_);
   };
 
 no Mouse::Util::TypeConstraints;
